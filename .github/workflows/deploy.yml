@@ -42,6 +42,10 @@ jobs:
 
           ssh-keyscan -p ${{ secrets.SERVER_PORT }} -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
 
+
+      - name: Install rsync
+        run: sudo apt-get update && sudo apt-get install -y rsync
+
       - name: Upload Project
         run: |
           rsync -avz --delete \
