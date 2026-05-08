@@ -62,10 +62,10 @@ export default function FeaturedCars({ cars }: { cars: Car[] }) {
 
                 <div className="absolute inset-0 bg-linear-to-t from-black/30 to-transparent" />
 
-                {car.status === 'available' && (
+                {car.analytics.status === 'available' && (
                   <Badge className="absolute top-2 left-2 text-[10px]">Tersedia</Badge>
                 )}
-                {car.status === 'booked' && (
+                {car.analytics.status === 'booked' && (
                   <Badge variant="secondary" className="absolute top-2 left-2 text-[10px]">
                     Dipesan
                   </Badge>

@@ -30,9 +30,9 @@ export function generateFaqItems(car: Car) {
     },
     {
       q: `Apakah ${car.title} masih tersedia?`,
-      a: car.status === 'available'
+      a: car.analytics.status === 'available'
         ? `Ya, ${car.title} masih tersedia dan siap untuk test drive. Hubungi kami via WhatsApp untuk informasi lebih lanjut.`
-        : car.status === 'booked'
+        : car.analytics.status === 'booked'
           ? `${car.title} sedang dalam proses booking. Hubungi kami untuk konfirmasi ketersediaan.`
           : `Mohon maaf, ${car.title} sudah terjual. Silakan lihat mobil serupa lainnya.`,
     },
