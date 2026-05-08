@@ -18,17 +18,19 @@ jobs:
         with:
           node-version: 24
 
+      - name: Create Environment
+        run: |
+          echo "${{ secrets.ENV_FILE }}" > .env
+
+          mkdir -p db
+
+          touch db/database.db
+
       - name: Install Dependencies
         run: npm install
 
       - name: Build Project
         run: npm run build
-
-      - name: Create Environment
-        run: |
-          echo "${{ secrets.ENV_FILE }}" > .env
-          mkdir db || touch db/database.db
-
 
       - name: Setup SSH
         run: |
@@ -46,12 +48,14 @@ jobs:
             -e "ssh -i ~/.ssh/id_ed25519 -p ${{ secrets.SERVER_PORT }}" \
             .next \
             public \
+            src \
             carsgallery \
             media \
             package.json \
             package-lock.json \
             payload.config.ts \
             next.config.ts \
+            .env \
             root@${{ secrets.SERVER_HOST }}:/root/apps/mawarmotor-web
 
       - name: Install & Restart PM2
@@ -60,11 +64,11 @@ jobs:
             -p ${{ secrets.SERVER_PORT }} \
             root@${{ secrets.SERVER_HOST }} << 'EOF'
 
-              cd /root/apps
+              cd /root/apps/mawarmotor-web
 
               npm install --omit=dev
 
-              pm2 restart payload-app || pm2 start npm --name "mawar-motor-app" -- start
+              pm2 restart mawar-motor-app || pm2 start npm --name "mawar-motor-app" -- start
 
               pm2 save
 
