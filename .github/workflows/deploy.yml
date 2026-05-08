@@ -42,33 +42,41 @@ jobs:
 
           ssh-keyscan -p ${{ secrets.SERVER_PORT }} -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
 
-
-      - name: Install rsync
-        run: sudo apt-get update && sudo apt-get install -y rsync
+      - name: Compress Project
+        run: |
+          tar --exclude=node_modules \
+              --exclude=.git \
+              --exclude=db \
+              -czf deploy.tar.gz \
+              .next \
+              public \
+              src \
+              carsgallery \
+              media \
+              package.json \
+              package-lock.json \
+              payload.config.ts \
+              next.config.ts \
+              .env
 
       - name: Upload Project
         run: |
-          rsync -avz --delete \
-            -e "ssh -i ~/.ssh/id_ed25519 -p ${{ secrets.SERVER_PORT }}" \
-            .next \
-            public \
-            src \
-            carsgallery \
-            media \
-            package.json \
-            package-lock.json \
-            payload.config.ts \
-            next.config.ts \
-            .env \
-            root@${{ secrets.SERVER_HOST }}:/root/apps/mawarmotor-web
+          scp -i ~/.ssh/id_ed25519 \
+            -P ${{ secrets.SERVER_PORT }} \
+            deploy.tar.gz \
+            root@${{ secrets.SERVER_HOST }}:/root/apps/
 
-      - name: Install & Restart PM2
+      - name: Extract & Restart
         run: |
           ssh -i ~/.ssh/id_ed25519 \
             -p ${{ secrets.SERVER_PORT }} \
             root@${{ secrets.SERVER_HOST }} << 'EOF'
 
+              mkdir -p /root/apps/mawarmotor-web
+
               cd /root/apps/mawarmotor-web
+
+              tar -xzf ../deploy.tar.gz
 
               npm install --omit=dev
 
