@@ -1,0 +1,67 @@
+```yaml
+name: Deploy VPS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Project
+        run: npm run build
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+
+          chmod 600 ~/.ssh/id_ed25519
+
+          ssh-keyscan -p ${{ secrets.SERVER_PORT }} -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Upload Project
+        run: |
+          rsync -avz --delete \
+            -e "ssh -i ~/.ssh/id_ed25519 -p ${{ secrets.SERVER_PORT }}" \
+            .next \
+            public \
+            carsgallery \
+            media \
+            package.json \
+            package-lock.json \
+            payload.config.ts \
+            next.config.ts \
+            root@${{ secrets.SERVER_HOST }}:/root/apps/mawarmotor-web
+
+      - name: Install & Restart PM2
+        run: |
+          ssh -i ~/.ssh/id_ed25519 \
+            -p ${{ secrets.SERVER_PORT }} \
+            root@${{ secrets.SERVER_HOST }} << 'EOF'
+
+              cd /root/apps
+
+              npm install --omit=dev
+
+              pm2 restart payload-app || pm2 start npm --name "mawar-motor-app" -- start
+
+              pm2 save
+
+          EOF
+```
