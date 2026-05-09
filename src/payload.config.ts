@@ -6,20 +6,19 @@ import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 import { importExportPlugin } from '@payloadcms/plugin-import-export'
-import { Users } from './app/payload/collections/Users'
-import { CarsGallery, Media } from './app/payload/collections/Media'
-import { Site } from './app/payload/globals/site'
-import { CarBrands, Cars, CarTypes } from './app/payload/collections/Cars'
-import { Hero } from './app/payload/globals/hero'
-import { Review } from './app/payload/globals/review'
-import { Advantage } from './app/payload/globals/advantage'
-import { Rents } from './app/payload/collections/Rent'
+import { Users } from './payload/collections/Users'
+import { CarsGallery, Media } from './payload/collections/Media'
+import { Site } from './payload/globals/site'
+import { CarBrands, Cars, CarTypes } from './payload/collections/Cars'
+import { Hero } from './payload/globals/hero'
+import { Review } from './payload/globals/review'
+import { Advantage } from './payload/globals/advantage'
+import { Rents } from './payload/collections/Rent'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
-
   admin: {
     user: Users.slug,
     theme: 'light',
@@ -27,12 +26,16 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
 
-
     components: {
-      beforeNavLinks: ['/app/payload/components/AnalyticNavLink'],
-      views: {
+      beforeNavLinks: [
+        '/payload/components/AnalyticNavLink',
+      ],
+      afterNavLinks:[ '/payload/components/LogoutButton'],
+
+      views: {          
         dashboard: {
-          Component: '/app/payload/components/AnalyticDashboard',
+          Component: '/payload/components/AnalyticDashboard',
+
         },
       },
     },
@@ -58,10 +61,11 @@ export default buildConfig({
     }),
     seoPlugin({
       collections: ['cars'],
-      uploadsCollection: 'media',
-      generateTitle: ({ doc }) => doc?.title || 'Default Title',
+      uploadsCollection: 'carsgallery',
+      generateTitle: ({ doc }) =>
+        `${doc?.carBrand}-${doc?.title}-${doc?.buildYear} | Mawar Motor` || 'Mawar Motor',
 
-      generateDescription: ({ doc }) => doc?.plainText || 'Deskripsi mobil terbaik',
+      generateDescription: ({ doc }) => doc?.description || 'Deskripsi mobil terbaik',
 
       generateURL: ({ doc, collectionSlug }) =>
         `${process.env.NEXT_PUBLIC_APP_URL}/${collectionSlug}/${doc?.slug}`,

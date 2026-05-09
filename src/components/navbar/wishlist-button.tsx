@@ -31,7 +31,7 @@ export default function WishlistButton() {
         )}
       </PopoverTrigger>
 
-      <PopoverContent side="bottom" align="end" className="w-80">
+      <PopoverContent side="bottom" align="end" className="w-80 mt-5">
         <PopoverHeader>
           <div className="flex items-center justify-between">
             <PopoverTitle className="text-sm font-semibold">
@@ -65,13 +65,13 @@ export default function WishlistButton() {
               >
                 {/* Thumbnail */}
                 <Link href={`/cars/${item.slug}`} className="shrink-0">
-                  <div className="relative w-14 h-10 rounded-md bg-muted overflow-hidden">
+                  <div className="relative w-24 h-16 p-2 border rounded-sm bg-muted overflow-hidden">
                     {item.image ? (
                       <Image
                         src={item.image}
                         alt={item.title}
                         fill
-                        sizes="56px"
+                        sizes="70px"
                         className="object-cover"
                       />
                     ) : (

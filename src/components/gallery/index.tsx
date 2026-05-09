@@ -141,14 +141,14 @@ export default function MediaGallery({
         {/* Main Image Viewer */}
         {activeItem && (
           <div className="relative group mx-5 rounded-xl overflow-hidden bg-black">
-            <div className="relative w-full aspect-16/10">
+            <div className="relative w-full aspect-video">
               {activeItem.type === 'photo' ? (
                 <Image
                   src={activeItem.src}
                   alt={activeItem.alt}
                   fill
-                  sizes="(max-width: 768px) 100vw, 800px"
-                  className="object-contain"
+                  sizes="100%"
+                  className="object-cover"
                   priority={activeIndex === 0}
                 />
               ) : (
@@ -218,7 +218,7 @@ export default function MediaGallery({
               role="tab"
               aria-selected={activeIndex === i}
               className={cn(
-                'relative shrink-0 w-16 h-12 md:w-20 md:h-14 rounded-lg overflow-hidden transition-all ring-offset-2',
+                'relative shrink-0 aspect-video w-16 md:w-20 rounded-lg overflow-hidden transition-all ring-offset-2',
                 activeIndex === i
                   ? 'ring-2 ring-primary opacity-100'
                   : 'opacity-60 hover:opacity-90 ring-1 ring-border',
@@ -303,9 +303,9 @@ export default function MediaGallery({
               <Image
                 src={activeItem.src}
                 alt={activeItem.alt}
-                width={1200}
-                height={800}
-                className="max-w-full rounded-md  max-h-[85vh] object-contain"
+                width={1280}
+                height={720}
+                className="max-w-full rounded-md max-h-[85vh] object-cover aspect-video"
                 priority
               />
             ) : (

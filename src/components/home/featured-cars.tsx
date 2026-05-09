@@ -1,4 +1,4 @@
-import type { Car, Media } from '@/payload-types'
+import type { Car } from '@/payload-types'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
@@ -7,11 +7,8 @@ import { Gauge, Fuel, ArrowRight } from 'lucide-react'
 import _ from 'lodash'
 
 function getFeaturedImage(car: Car): string | null {
-  const featured = car.gallery?.find((g) => g.isFeatured)
-  const first = featured || car.gallery?.[0]
-  if (!first) return null
-  const img = first.image
-  return typeof img === 'object' ? img.url || null : null
+  const featured = car.cardthumbnail
+  return typeof featured === 'object' ? featured.sizes?.card?.url || featured.url || null : null
 }
 
 export default function FeaturedCars({ cars }: { cars: Car[] }) {
@@ -44,7 +41,7 @@ export default function FeaturedCars({ cars }: { cars: Car[] }) {
               href={`/cars/${car.slug}`}
               className="group flex flex-col overflow-hidden rounded-xl border bg-card shadow-sm hover:shadow-md transition-all"
             >
-              {/* Image */}
+              {/* Image  4/3*/}
               <div className="relative aspect-4/3 bg-muted overflow-hidden">
                 {imageUrl ? (
                   <Image

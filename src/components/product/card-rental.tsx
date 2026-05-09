@@ -60,6 +60,7 @@ export default function CardRental({
       {/* IMAGE */}
       <CardHeader className="relative p-0">
         <Link href={href}>
+          {/* 16/9 */}
           <div className="relative w-full aspect-video rounded-xl overflow-hidden">
             {image ? (
               <Image

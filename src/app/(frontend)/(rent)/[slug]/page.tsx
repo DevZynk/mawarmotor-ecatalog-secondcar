@@ -23,6 +23,7 @@ import formatRupiah from '@/lib/formatRupiah'
 import MediaGallery from '@/components/gallery'
 import type { MediaItem } from '@/components/gallery/types'
 import { Calendar, Key, PersonSimpleWalk } from '@phosphor-icons/react/dist/ssr'
+import { getPayloadClient } from '@/lib/payload'
 
 // ── Helpers ──────────────────────────────────────────────
 
@@ -75,7 +76,7 @@ function buildGalleryItems(car: Rent): MediaItem[] {
         type: isVideo ? 'video' : 'photo',
         category: (g.tag || 'all') as MediaItem['category'],
         src: url,
-        thumb: img.thumbnailURL || url,
+        thumb: img?.sizes?.gallery?.url || url,
         alt: img.alt || `${car.title} - Foto ${i + 1}`,
         width: img.width || undefined,
         height: img.height || undefined,
@@ -87,7 +88,7 @@ function buildGalleryItems(car: Rent): MediaItem[] {
 // ── Data fetching ────────────────────────────────────────
 
 async function getRent(slug: string) {
-  const payload = await getPayload({ config })
+  const payload = await getPayloadClient()
   const { docs } = await payload.find({
     collection: 'rents',
     where: { slug: { equals: slug } },
@@ -161,7 +162,7 @@ export default async function RentDetailPage({
       const img = g.image
       if (!img || typeof img !== 'object') return null
 
-      const url = img.url || ''
+      const url = img.sizes?.gallery?.url || ''
       const alt = img.alt || rent.title
       return { type: 'image' as const, url, alt }
     })

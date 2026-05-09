@@ -63,7 +63,7 @@ function BreakdownRow({ label, value }: { label: string; value: string }) {
 export default function FinanceCard({ carName, carPrice, leasing }: FinanceCardProps) {
   const site = useSite()
   const [providerIdx, setProviderIdx] = useState(0)
-  const [tenor, setTenor] = useState<number>(() => leasing[0].tenorOption[0])
+  const [tenor, setTenor] = useState<number>(() => leasing[0].tenorOption.slice(-1)[0])
   const [dpPct, setDpPct] = useState<number>(() => toMinDpPct(leasing[0].downPaymentMin, carPrice))
 
   const provider = leasing[providerIdx]
@@ -220,7 +220,7 @@ Mohon dibantu informasi estimasi cicilan per bulan dan proses pengajuannya ya. T
             <BreakdownRow label={`Uang muka (${clampedDpPct}%)`} value={fmt(downPayment)} />
             <BreakdownRow label="Pokok pinjaman" value={fmt(loan)} />
             <BreakdownRow
-              label={`Bunga flat ${provider.interestRate}% × ${tenor / 12} thn`}
+              label={`Bunga flat ${provider.interestRate}% × ${(tenor + 1) / 12} thn`}
               value={fmt(interest)}
             />
           </div>

@@ -30,22 +30,22 @@ export default function CardCatalog({
   odometer,
   fuelType,
   badge,
-  isWishlisted = false,
 }: CardCatalogProps) {
 
   return (
-    <Card className="group pt-0 flex flex-col overflow-hidden rounded-xl border bg-background shadow-sm hover:shadow-md transition-all">
+    <Card className="group pt-0 flex flex-col overflow-hidden rounded-xl max-w-xs border bg-background shadow-sm hover:shadow-md transition-all">
       
       {/* IMAGE */}
       <CardHeader className="relative p-0">
         <Link href={href}>
-          <div className="relative w-full aspect-video rounded-xl overflow-hidden">
+          {/* 4/3 */}
+          <div className="relative w-full aspect-4/3 rounded-xl overflow-hidden">
             {image ? (
               <Image
                 src={image}
                 alt={title || 'Mobil'}
                 fill
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                sizes="full"
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
             ) : (

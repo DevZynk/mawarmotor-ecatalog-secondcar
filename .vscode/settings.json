@@ -37,5 +37,9 @@
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": "explicit"
     }
-  }
+  },
+  "search.exclude": {
+    "**/node_modules": false
+  },
+  "search.useGlobalIgnoreFiles": true
 }

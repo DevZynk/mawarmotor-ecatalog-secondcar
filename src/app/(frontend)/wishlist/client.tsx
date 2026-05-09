@@ -65,6 +65,7 @@ export default function WishlistClient() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {items.map((car) => (
             <div key={car.id} className="group flex flex-col overflow-hidden rounded-xl border bg-background shadow-sm hover:shadow-md transition-all">
+              {/* 4/3 */}
               <Link href={`/cars/${car.slug}`} className="relative w-full aspect-4/3 rounded-t-xl overflow-hidden block">
                 {car.image ? (
                   <Image

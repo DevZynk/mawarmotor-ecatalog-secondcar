@@ -12,7 +12,6 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 
-import Logo from '../shared/logo'
 
 export function SearchButton() {
   return (

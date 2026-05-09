@@ -5,11 +5,8 @@ import { Gauge, Fuel } from 'lucide-react'
 import formatRupiah from '@/lib/formatRupiah'
 
 function getFeaturedImage(car: Car): string | null {
-  const featured = car.gallery?.find((g) => g.isFeatured)
-  const first = featured || car.gallery?.[0]
-  if (!first) return null
-  const img = first.image
-  return typeof img === 'object' ? img.url || null : null
+  const featured = car.cardthumbnail
+  return typeof featured === 'object' ? featured.sizes?.card?.url || null : null
 }
 
 function getFuelLabel(f: string): string {

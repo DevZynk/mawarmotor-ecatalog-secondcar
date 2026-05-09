@@ -30,11 +30,7 @@ export const metadata: Metadata = {
 // ── Helpers ──────────────────────────────────────────────
 
 function getFeaturedImage(car: Car): string | null {
-  const featured = car.gallery?.find((g) => g.isFeatured)
-  const first = featured || car.gallery?.[0]
-  if (!first) return null
-  const img = first.image
-  return typeof img === 'object' ? img.url || null : null
+  return typeof car.cardthumbnail === 'object' ? car.cardthumbnail?.sizes?.card?.url || null : null
 }
 
 // ── Page ─────────────────────────────────────────────────

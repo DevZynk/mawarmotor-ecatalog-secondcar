@@ -19,7 +19,7 @@ export function GridCell({
       onClick={onClick}
       className={cn(
         'relative overflow-hidden rounded-lg cursor-pointer bg-muted group',
-        isFeatured ? 'md:col-span-2 aspect-4/3' : 'aspect-4/3',
+        isFeatured ? 'md:col-span-2 aspect-video' : 'aspect-4/3',
       )}
     >
       <Image

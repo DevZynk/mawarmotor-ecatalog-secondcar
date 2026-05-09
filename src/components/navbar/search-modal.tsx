@@ -166,7 +166,7 @@ export default function SearchModal({ open, onClose }: SearchModalProps) {
 
     fetchFilters()
   }, [open])
-  // Keyboard shortcuts
+
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && open) onClose()
@@ -189,7 +189,7 @@ export default function SearchModal({ open, onClose }: SearchModalProps) {
       params.set('depth', '1')
 
       if (q.length >= 2) params.set('where[title][like]', q)
-      params.set('where[status][equals]', 'available')
+      params.set('where[analytics.status][equals]', 'available')
       if (f.brand) params.set('where[carBrand][equals]', f.brand)
       if (f.type) params.set('where[carType][equals]', f.type)
       if (f.fuel) params.set('where[carSpecification.fuel][equals]', f.fuel)
@@ -209,7 +209,7 @@ export default function SearchModal({ open, onClose }: SearchModalProps) {
       const mapped: SearchResult[] = (data.docs || []).map((car: any) => {
         const featuredGallery = car.gallery?.find((g: any) => g.isFeatured) || car.gallery?.[0]
         const img = featuredGallery?.image
-        const imageUrl = typeof img === 'object' ? img?.url || null : null
+        const imageUrl = typeof img === 'object' ? img.sizes?.thumbnail?.url || null : null
 
         return {
           id: String(car.id),

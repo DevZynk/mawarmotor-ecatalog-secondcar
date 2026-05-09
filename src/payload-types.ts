@@ -183,7 +183,7 @@ export interface User {
  */
 export interface Media {
   id: number;
-  alt: string;
+  alt?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -195,6 +195,32 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
+  sizes?: {
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    card?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    large?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -203,9 +229,8 @@ export interface Media {
 export interface Car {
   id: number;
   title: string;
-  plateNumber: string;
-  carBrand?: (number | null) | CarBrand;
-  carType?: (number | null) | CarType;
+  carBrand: number | CarBrand;
+  carType: number | CarType;
   carSpecification: {
     engine: number;
     passenger: number;
@@ -216,28 +241,33 @@ export interface Car {
     registrationYear: number;
     buildYear: number;
   };
+  /**
+   * Foto utama untuk Card (Rasio foto 4:3 )
+   */
+  cardthumbnail: number | Carsgallery;
+  /**
+   * Galeri foto harus diisi Minimal 9 foto. Rasio foto harus 16:9
+   */
   gallery?:
     | {
         image: number | Carsgallery;
-        tag?: ('exterior' | 'interior' | 'engine') | null;
-        isPrimary?: boolean | null;
-        isFeatured?: boolean | null;
+        tag: 'exterior' | 'interior' | 'engine';
+        isSlideshow?: boolean | null;
         id?: string | null;
       }[]
     | null;
-  features?:
-    | {
-        feature?: string | null;
-        id?: string | null;
-      }[]
-    | null;
+  features: {
+    feature?: string | null;
+    id?: string | null;
+  }[];
   slug?: string | null;
   description: string;
   analytics: {
     status: 'available' | 'booked' | 'sold';
     purchasePrice: number;
-    purchaseDate?: string | null;
+    purchaseDate: string;
     soldPrice?: number | null;
+    soldDate?: string | null;
     repairs?:
       | {
           description: string;
@@ -252,19 +282,31 @@ export interface Car {
           id?: string | null;
         }[]
       | null;
-    soldDate?: string | null;
+    ownership: {
+      ownershipType: 'dealer' | 'personal';
+      personalOwner: {
+        name: string;
+        phone: string;
+        nik: string;
+        address: string;
+      };
+      stnkName: string;
+      plateNumber: string;
+      /**
+       * Contoh: tangan pertama = 1
+       */
+      handOwnership: number;
+    };
   };
   price: number;
   financing: {
     downPaymentMin: number;
-    leasing?:
-      | {
-          provider: string;
-          interestRate: number;
-          tenorMonths: ('12' | '24' | '36' | '48' | '60')[];
-          id?: string | null;
-        }[]
-      | null;
+    leasing: {
+      provider: string;
+      interestRate: number;
+      tenorMonths: ('11' | '23' | '35' | '47' | '59' | '71' | '83' | '95' | '119')[];
+      id?: string | null;
+    }[];
   };
   meta?: {
     title?: string | null;
@@ -272,10 +314,11 @@ export interface Car {
     /**
      * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
      */
-    image?: (number | null) | Media;
+    image?: (number | null) | Carsgallery;
   };
   updatedAt: string;
   createdAt: string;
+  deletedAt?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -309,7 +352,7 @@ export interface CarType {
  */
 export interface Carsgallery {
   id: number;
-  alt: string;
+  alt?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -321,6 +364,32 @@ export interface Carsgallery {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
+  sizes?: {
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    card?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    gallery?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -675,6 +744,40 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        card?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        large?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -682,7 +785,6 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface CarsSelect<T extends boolean = true> {
   title?: T;
-  plateNumber?: T;
   carBrand?: T;
   carType?: T;
   carSpecification?:
@@ -697,13 +799,13 @@ export interface CarsSelect<T extends boolean = true> {
         registrationYear?: T;
         buildYear?: T;
       };
+  cardthumbnail?: T;
   gallery?:
     | T
     | {
         image?: T;
         tag?: T;
-        isPrimary?: T;
-        isFeatured?: T;
+        isSlideshow?: T;
         id?: T;
       };
   features?:
@@ -721,6 +823,7 @@ export interface CarsSelect<T extends boolean = true> {
         purchasePrice?: T;
         purchaseDate?: T;
         soldPrice?: T;
+        soldDate?: T;
         repairs?:
           | T
           | {
@@ -735,7 +838,22 @@ export interface CarsSelect<T extends boolean = true> {
               cost?: T;
               id?: T;
             };
-        soldDate?: T;
+        ownership?:
+          | T
+          | {
+              ownershipType?: T;
+              personalOwner?:
+                | T
+                | {
+                    name?: T;
+                    phone?: T;
+                    nik?: T;
+                    address?: T;
+                  };
+              stnkName?: T;
+              plateNumber?: T;
+              handOwnership?: T;
+            };
       };
   price?: T;
   financing?:
@@ -760,6 +878,7 @@ export interface CarsSelect<T extends boolean = true> {
       };
   updatedAt?: T;
   createdAt?: T;
+  deletedAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -802,6 +921,40 @@ export interface CarsgallerySelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        card?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        gallery?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -999,15 +1152,15 @@ export interface Site {
   domain: string;
   logo: number | Media;
   location: string;
-  address?: string | null;
-  maps?: string | null;
-  social?: {
-    whatsapp?: string | null;
-    instagram?: string | null;
-    tiktok?: string | null;
-    facebook?: string | null;
+  address: string;
+  maps: string;
+  social: {
+    whatsapp: string;
+    instagram: string;
+    tiktok: string;
+    facebook: string;
   };
-  shortDescription?: string | null;
+  shortDescription: string;
   seo?: {
     metaTitle?: string | null;
     metaDescription?: string | null;

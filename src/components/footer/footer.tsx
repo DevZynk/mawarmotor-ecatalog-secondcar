@@ -1,12 +1,16 @@
-'use client'
-
-import { useSite } from '@/context/site-context'
 import Link from 'next/link'
 import Image from 'next/image'
-import { MapPinIcon, PhoneIcon } from '@phosphor-icons/react'
+import { Icon } from '../shared/icon'
+import { getPayloadClient } from '@/lib/payload'
 
-export default function Footer() {
-  const { siteName, logoUrl, alt, location, address, social, maps } = useSite()
+export default async function Footer() {
+  const payload = await getPayloadClient()
+  const { siteName, logo, location, address, social, maps } = await payload.findGlobal({
+    slug: 'site',
+  })
+
+  const logoUrl = (typeof logo === 'object' ? logo.sizes?.thumbnail?.url : null) || ''
+  const logoAlt = (typeof logo === 'object' ? logo.alt : null) || (siteName as string)
 
   const currentYear = new Date().getFullYear()
 
@@ -17,10 +21,10 @@ export default function Footer() {
           {/* Brand */}
           <div className="md:col-span-2 space-y-3">
             <div className="flex items-center gap-3">
-              {logoUrl && (
+              {logo && (
                 <Image
                   src={logoUrl}
-                  alt={alt || siteName}
+                  alt={logoAlt}
                   width={50}
                   height={50}
                   className="rounded-full object-cover"
@@ -34,22 +38,21 @@ export default function Footer() {
             {address && (
               <div className="flex gap-2 text-sm text-muted-foreground">
                 <Link href={`${maps}`} target="_blank">
-                  {' '}
-                  <MapPinIcon size={16} className="shrink-0 mt-0.5" />
+                  <Icon name="MapPinIcon" size={16} className="shrink-0 mt-0.5" />
                 </Link>
                 <p>{address}</p>
               </div>
             )}
-            {social.whatsapp && (
+            {social?.whatsapp && (
               <div className="flex gap-2 text-sm text-muted-foreground">
-                <PhoneIcon size={16} className="shrink-0" />
+                <Icon name="PhoneIcon" size={16} className="shrink-0" />
                 <Link
-                  href={`https://wa.me/${social.whatsapp.replace(/\D/g, '')}`}
+                  href={`https://wa.me/${social?.whatsapp.replace(/\D/g, '')}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-primary transition-colors"
                 >
-                  {social.whatsapp}
+                  {social?.whatsapp}
                 </Link>
               </div>
             )}
@@ -60,17 +63,17 @@ export default function Footer() {
             <p className="text-sm font-semibold text-foreground">Navigasi</p>
             <nav className="flex flex-col gap-2">
               {[
-                { href: '/', label: 'Beranda' },
-                { href: '/cars', label: 'Mobil Bekas' },
+                { title: 'Beranda', icon: "HouseIcon", href: '/' },
+                { title: 'Mobil Bekas', icon: "CarProfileIcon", href: '/cars' },
                 // { href: '/rent', label: 'Sewa Mobil' },
                 // { href: '/news', label: 'Berita' },
               ].map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-2"
                 >
-                  {link.label}
+                  <Icon name={link.icon} size={18} /> {link.title}
                 </Link>
               ))}
             </nav>
@@ -80,34 +83,34 @@ export default function Footer() {
           <div className="space-y-3">
             <p className="text-sm font-semibold text-foreground">Ikuti Kami</p>
             <div className="flex flex-col gap-2">
-              {social.instagram && (
+              {social?.instagram && (
                 <Link
-                  href={social.instagram}
+                  href={social?.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-2"
                 >
-                  Instagram
+                  <Icon name="InstagramLogoIcon" size={18} /> Instagram
                 </Link>
               )}
-              {social.tiktok && (
+              {social?.tiktok && (
                 <Link
-                  href={social.tiktok}
+                  href={social?.tiktok}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-2"
                 >
-                  TikTok
+                  <Icon name="TiktokLogoIcon" size={18} /> TikTok
                 </Link>
               )}
-              {social.facebook && (
+              {social?.facebook && (
                 <Link
-                  href={social.facebook}
+                  href={social?.facebook}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-2"
                 >
-                  Facebook
+                  <Icon name="FacebookLogoIcon" size={18} /> Facebook
                 </Link>
               )}
             </div>

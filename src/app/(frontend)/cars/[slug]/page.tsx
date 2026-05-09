@@ -93,8 +93,8 @@ function buildGalleryItems(car: Car): MediaItem[] {
         id: g.id || `gallery-${i}`,
         type: isVideo ? 'video' : 'photo',
         category: (g.tag || 'all') as MediaItem['category'],
-        src: url,
-        thumb: img.thumbnailURL || url,
+        src: img.sizes?.gallery?.url || img.url || '',
+        thumb: img.sizes?.thumbnail?.url || img.url || '',
         alt: img.alt || `${car.title} - Foto ${i + 1}`,
         width: img.width || undefined,
         height: img.height || undefined,
@@ -190,10 +190,10 @@ export default async function CarDetailPage({ params }: { params: Promise<{ slug
 
   // Build gallery media items for carousel (featured only)
   const carouselMedia = (car.gallery || [])
-    .filter((g) => g.isFeatured)
+    .filter((g) => g.isSlideshow)
     .map((g) => {
       const img = g.image
-      const url = typeof img === 'object' ? img.url || '' : ''
+      const url = typeof img === 'object' ? img.sizes?.gallery?.url || img.url || '' : ''
       const alt = typeof img === 'object' ? img.alt || car.title : car.title
       return { type: 'image' as const, url, alt }
     })
@@ -366,7 +366,7 @@ export default async function CarDetailPage({ params }: { params: Promise<{ slug
                 <div className="hidden md:flex gap-3">
                   <Link
                     href={`https://wa.me/${site.social?.whatsapp?.replace(/\D/g, '')}?text=${encodeURIComponent(
-`Halo ${site.siteName}, saya tertarik dengan mobil ${car.title} (${process.env.NEXT_PUBLIC_APP_URL}/cars/${car.slug}).
+                      `Halo ${site.siteName}, saya tertarik dengan mobil ${car.title} (${process.env.NEXT_PUBLIC_APP_URL}/cars/${car.slug}).
 
 Saya ingin menanyakan:
 • Apakah unit ini masih tersedia?
@@ -438,7 +438,7 @@ Mohon informasinya ya, terima kasih`,
             {/* Related */}
             {related.length > 0 && (
               <Card className="p-5">
-                <RelatedCars cars={related} currentSlug={car.slug || ""} />
+                <RelatedCars cars={related} currentSlug={car.slug || ''} />
               </Card>
             )}
           </div>
@@ -480,7 +480,7 @@ Mohon informasinya ya, terima kasih`,
               <div className="border-t pt-4 space-y-2">
                 <Link
                   href={`https://wa.me/${site.social?.whatsapp?.replace(/\D/g, '')}?text=${encodeURIComponent(
-`Halo ${site.siteName}, saya tertarik dengan mobil ${car.title} (${process.env.NEXT_PUBLIC_APP_URL}/cars/${car.slug}).
+                    `Halo ${site.siteName}, saya tertarik dengan mobil ${car.title} (${process.env.NEXT_PUBLIC_APP_URL}/cars/${car.slug}).
 
 Saya ingin menanyakan:
 • Apakah unit ini masih tersedia?
