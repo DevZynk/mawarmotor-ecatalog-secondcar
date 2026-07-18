@@ -1,0 +1,7 @@
+User-agent: *
+
+Allow: /
+
+Sitemap: https://mawarmotorbanjarmasin.com/sitemap.xml
+
+Humans: https://mawarmotorbanjarmasin.com/humans.txt

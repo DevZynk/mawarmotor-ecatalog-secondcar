@@ -120,7 +120,15 @@ export default async function Footer() {
         {/* Copyright */}
         <div className="border-t mt-8 pt-6 text-center">
           <p className="text-xs text-muted-foreground">
-            © {currentYear} {siteName}. Semua hak dilindungi.
+            © {currentYear} {siteName}. Designed & Developed by{" "}
+              <a
+                href="https://hztech.id"
+                target="_blank"
+                rel="noopener"
+                className="font-medium text-foreground hover:text-primary transition-colors underline decoration-dotted underline-offset-4"
+              >
+            HZ Tech
+        </a>.
           </p>
         </div>
       </div>

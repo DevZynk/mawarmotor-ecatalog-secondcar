@@ -81,6 +81,26 @@ export async function generateMetadata() {
         ? { index: false, follow: false }
         : { index: true, follow: true },
 
+authors: [
+  {
+    name: 'HZ Tech',
+    url: 'https://hztech.id',
+  },
+],
+
+creator: 'Dheo Hilman Darmawan',
+
+publisher: 'HZ Tech',
+
+applicationName: site.siteName || 'Mawar Motor E-Catalog',
+
+generator: 'HZ Tech CMS',
+
+referrer: 'origin-when-cross-origin',
+other: {
+    'link:author': 'https://hztech.id'
+},
+
     icons: {
       icon: '/favicon.ico',
       apple: '/apple-touch-icon.png',
@@ -108,7 +128,33 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <html lang="id" suppressHydrationWarning>
+          <head>
+
+        <link rel="author" href="/humans.txt" />
+
+        <link rel="author" href="https://hztech.id"/>
+
+        <link rel="me" href="https://hztech.id"/>
+
+        <link rel="help" href="https://hztech.id"/>
+
+        <link
+            rel="license"
+            href="https://hztech.id"
+        />
+
+    </head>
+
       <body className={`${jakarta.className} bg-background scroll-smooth relative`}>
+
+{/* Website Developed by
+
+HZ Tech
+https://hztech.id
+
+Developer:
+Dheo Hilman Darmawan */}
+
         <SiteProvider
           value={{
             siteName: site.siteName || '',
@@ -160,7 +206,25 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <Footer />
           <WhatsAppFloat />
         </SiteProvider>
+<script
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{
+    __html: JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: site.siteName || 'Mawar Motor E-Catalog',
+      url: site.domain,
+      creator: {
+        '@type': 'Organization',
+        name: 'HZ Tech',
+        url: 'https://hztech.id',
+      },
+    }),
+  }}
+/>
       </body>
     </html>
   )
 }
+
+
