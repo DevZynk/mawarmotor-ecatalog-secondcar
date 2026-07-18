@@ -69,21 +69,13 @@ jobs:
           ssh -i ~/.ssh/id_ed25519 \
             -p ${{ secrets.SERVER_PORT }} \
             root@${{ secrets.SERVER_HOST }} << 'EOF'
-
-                mkdir -p /root/apps/mawarmotor-web
-
-                cd /root/apps/mawarmotor-web
-
-                rm -rf .next
-                rm -rf public
-                rm -rf src
-
-                tar -xzf ../deploy.tar.gz
-
-                npm install --omit=dev
-
-                pm2 restart mawar-motor-app || pm2 start npm --name "mawar-motor-app" -- start
-
-                pm2 save
-
-            EOF
+            mkdir -p /root/apps/mawarmotor-web
+            cd /root/apps/mawarmotor-web
+            rm -rf .next
+            rm -rf public
+            rm -rf src
+            tar -xzf ../deploy.tar.gz
+            npm install --omit=dev
+            pm2 restart mawar-motor-app || pm2 start npm --name "mawar-motor-app" -- start
+            pm2 save
+EOF
