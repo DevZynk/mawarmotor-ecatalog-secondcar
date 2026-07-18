@@ -8,39 +8,16 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-22.04
-    
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24
-
-      - name: Create Environment
-        run: |
-          echo "${{ secrets.ENV_FILE }}" > .env
-
-          mkdir -p db
-
-          touch db/database.db
-
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Build Project
-        run: npm run build
-
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
-
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
-
           chmod 600 ~/.ssh/id_ed25519
-
           ssh-keyscan -p ${{ secrets.SERVER_PORT }} -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
 
       - name: Compress Project
@@ -49,13 +26,9 @@ jobs:
             --exclude=node_modules \
             --exclude=.git \
             --exclude=db \
+            --exclude=.next \
             -czf deploy.tar.gz \
-            .next \
-            public \
-            src \
-            package.json \
-            package-lock.json \
-            next.config.ts
+            .
 
       - name: Upload Project
         run: |
@@ -64,18 +37,25 @@ jobs:
             deploy.tar.gz \
             root@${{ secrets.SERVER_HOST }}:/root/apps/
 
-      - name: Extract & Restart
+      - name: Extract & Build on Server
         run: |
           ssh -i ~/.ssh/id_ed25519 \
             -p ${{ secrets.SERVER_PORT }} \
             root@${{ secrets.SERVER_HOST }} << 'EOF'
             mkdir -p /root/apps/mawarmotor-web
             cd /root/apps/mawarmotor-web
-            rm -rf .next
-            rm -rf public
-            rm -rf src
+            
+            # Hapus file lama (kecuali database .db dan file .env)
+            rm -rf .next public src package.json package-lock.json next.config.ts tsconfig.json postcss.config.mjs components.json eslint.config.mjs
+            
+            # Ekstrak source code baru
             tar -xzf ../deploy.tar.gz
-            npm install --omit=dev
+            
+            # Install dependensi & build langsung di server
+            npm install
+            npm run build
+            
+            # Restart PM2
             pm2 restart mawar-motor-app || pm2 start npm --name "mawar-motor-app" -- start
             pm2 save
           EOF
