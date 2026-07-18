@@ -8,6 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-22.04
+    
 
     steps:
       - name: Checkout Repository
@@ -54,8 +55,7 @@ jobs:
             src \
             package.json \
             package-lock.json \
-            next.config.ts \
-            .env
+            next.config.ts
 
       - name: Upload Project
         run: |
