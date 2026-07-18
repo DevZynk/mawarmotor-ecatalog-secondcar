@@ -78,4 +78,4 @@ jobs:
             npm install --omit=dev
             pm2 restart mawar-motor-app || pm2 start npm --name "mawar-motor-app" -- start
             pm2 save
-EOF
+          EOF
