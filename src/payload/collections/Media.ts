@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { randomUUID } from 'crypto'
 import { isAdmin, isManagerOrAbove } from '../access'
 
 export const Media: CollectionConfig = {
@@ -24,10 +25,15 @@ export const Media: CollectionConfig = {
       label: 'Deskripsi Gambar (Alt)',
       type: 'text',
       hooks: {
+        
         beforeChange: [
           ({ value, req, data }) => {
             if (!value) {
-              return req?.file?.name?.split('.')[0] || data?.filename?.split('.')[0] || 'Media'
+              return (
+                (req?.context?.originalFilename as string | undefined) ||
+                data?.filename?.split('.')[0] ||
+                'Media'
+              )
             }
             return value
           },
@@ -35,6 +41,19 @@ export const Media: CollectionConfig = {
       },
     },
   ],
+  hooks: {
+    beforeOperation: [
+      ({ req, operation }) => {
+        if ((operation === 'create' || operation === 'update') && req.file) {
+          const originalName = req.file.name
+          const ext = originalName.split('.').pop()
+          if (!req.context) req.context = {}
+          req.context.originalFilename = originalName.replace(/\.[^.]+$/, '')
+          req.file.name = `${randomUUID()}.${ext}`
+        }
+      },
+    ],
+  },
   upload: {
     staticDir: 'media',
     imageSizes: [
@@ -95,7 +114,9 @@ export const CarsGallery: CollectionConfig = {
           ({ value, req, data }) => {
             if (!value) {
               return (
-                req?.file?.name?.split('.')[0] || data?.filename?.split('.')[0] || 'Galeri Mobil'
+                (req?.context?.originalFilename as string | undefined) ||
+                data?.filename?.split('.')[0] ||
+                'Galeri Mobil'
               )
             }
             return value
@@ -104,11 +125,26 @@ export const CarsGallery: CollectionConfig = {
       },
     },
   ],
+  hooks: {
+    beforeOperation: [
+      ({ req, operation }) => {
+        if ((operation === 'create' || operation === 'update') && req.file) {
+          const originalName = req.file.name
+          const ext = originalName.split('.').pop()
+          if (!req.context) req.context = {}
+          req.context.originalFilename = originalName.replace(/\.[^.]+$/, '')
+          req.file.name = `${randomUUID()}.${ext}`
+        }
+      },
+    ],
+  },
   upload: {
     staticDir: 'cars-gallery',
 
     imageSizes: [
+      
       {
+        
         name: 'thumbnail',
         width: 320,
         height: 240,

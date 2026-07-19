@@ -181,6 +181,7 @@ export default function SearchModal() {
       const res = await fetch(`/api/cars?${params.toString()}`)
       const data = await res.json()
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const mapped: SearchResult[] = (data.docs || []).map((car: any) => {
         const featuredGallery = car.gallery?.find((g: any) => g.isFeatured) || car.gallery?.[0]
         const img = featuredGallery?.image
@@ -335,7 +336,7 @@ export default function SearchModal() {
                       <CaretDownIcon className="ml-1 h-3.5 w-3.5 opacity-50 shrink-0" />
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-[180px] p-0" align="start">
+                  <PopoverContent className="w-60 p-0" align="start">
                     <Command>
                       <CommandInput placeholder="Cari merek..." className="h-8 text-xs" />
                       <CommandList>

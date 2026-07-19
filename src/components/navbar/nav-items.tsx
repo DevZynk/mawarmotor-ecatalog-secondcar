@@ -3,15 +3,10 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { AnimatePresence, motion } from 'motion/react'
-import {
-  CarProfileIcon,
-  HeartIcon,
-  HouseIcon,
-  XIcon,
-  ListIcon
-} from '@phosphor-icons/react'
+import { CarProfileIcon, HeartIcon, HouseIcon, XIcon, ListIcon } from '@phosphor-icons/react'
 import { useState } from 'react'
 import { useWishlist } from '@/hooks/use-wishlist'
+import { Button } from '../ui/button'
 
 const navItems = [
   { title: 'Beranda', icon: HouseIcon, href: '/' },
@@ -26,7 +21,8 @@ export function DesktopMenu() {
     <nav aria-label="Navigasi utama">
       <ul className="flex gap-1 items-center">
         {navItems.map((item, index) => {
-          const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href))
+          const isActive =
+            pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href))
 
           return (
             <li key={item.href} className="relative">
@@ -35,9 +31,7 @@ export function DesktopMenu() {
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
                 className={`relative flex items-center gap-1.5 px-4 py-2 text-sm font-semibold rounded-lg transition-colors duration-200 ${
-                  isActive
-                    ? 'text-primary'
-                    : 'text-muted-foreground hover:text-foreground'
+                  isActive ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
                 }`}
                 aria-current={isActive ? 'page' : undefined}
               >
@@ -105,13 +99,15 @@ export function MobileMenu() {
   return (
     <>
       {/* Hamburger button */}
-      <button
+      <Button
         onClick={() => setOpen(true)}
-        className="inline-flex shrink-0 items-center justify-center rounded-full border border-border bg-background hover:bg-muted size-9 transition-all outline-none md:hidden"
+        variant={'ghost'}
+        size={'icon-lg'}
+        className='md:hidden'
         aria-label="Buka menu navigasi"
       >
         <ListIcon size={18} />
-      </button>
+      </Button>
 
       {/* Overlay + Slide menu */}
       <AnimatePresence>

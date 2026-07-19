@@ -18,23 +18,27 @@ export default async function HeroSection({ totalCars }: { totalCars: number }) 
     : '#'
 
   const backgroundImage = hero.backgroundImage
-  const backgroundImageUrl =
-    (backgroundImage && typeof backgroundImage === 'object'
-      ? backgroundImage.url
-      : null) || bgCard.src
+  const hasCmsImage = backgroundImage && typeof backgroundImage === 'object'
 
   return (
     <section
       id="heroSection"
       className="relative overflow-hidden rounded-2xl bg-linear-to-br from-primary/50 via-primary to-primary/70 text-primary-foreground"
     >
-      {backgroundImageUrl && (
+      {hasCmsImage ? (
         <ImageBox
-          media={backgroundImageUrl}
+          media={backgroundImage}
           alt="Hero Background"
           fill
           sizes="100vw"
           className="object-cover opacity-50 mix-blend-overlay pointer-events-none select-none"
+        />
+      ) : (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={bgCard.src}
+          alt="Hero Background"
+          className="absolute inset-0 w-full h-full object-cover opacity-50 mix-blend-overlay pointer-events-none select-none"
         />
       )}
 
