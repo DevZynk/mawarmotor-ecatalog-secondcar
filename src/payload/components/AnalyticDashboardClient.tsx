@@ -139,7 +139,6 @@ const diffDaysFrom = (a: Date, b: Date) =>
 const getAgingConfig = (days: number) =>
   AGING_CONFIG.find(({ min, max }) => days >= min && days <= max) ?? AGING_CONFIG[0]
 
-const getRelId = (v: any): string | null => (!v ? null : typeof v === 'object' ? v.id : v)
 
 // ─── Data hook ────────────────────────────────────────────────────────────────
 

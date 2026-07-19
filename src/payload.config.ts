@@ -29,6 +29,9 @@ export default buildConfig({
     components: {
       beforeNavLinks: ['/payload/components/AnalyticNavLink'],
       afterNavLinks: ['/payload/components/LogoutButton'],
+      graphics: {
+        Logo: '/payload/components/AdminLogo',
+      },
 
       views: {
         dashboard: {

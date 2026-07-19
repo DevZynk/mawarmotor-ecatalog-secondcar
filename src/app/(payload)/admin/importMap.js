@@ -21,6 +21,7 @@ import { ExportPreview as ExportPreview_cdf7e044479f899a31f804427d568b36 } from 
 import { ExportSaveButton as ExportSaveButton_cdf7e044479f899a31f804427d568b36 } from '@payloadcms/plugin-import-export/rsc'
 import { ImportPreview as ImportPreview_cdf7e044479f899a31f804427d568b36 } from '@payloadcms/plugin-import-export/rsc'
 import { ImportSaveButton as ImportSaveButton_cdf7e044479f899a31f804427d568b36 } from '@payloadcms/plugin-import-export/rsc'
+import { default as default_564bf34304abb38917a0b375396d43e6 } from '../../../payload/components/AdminLogo'
 import { default as default_7c0525bf499ee6ddfb90ddfff60da17e } from '../../../payload/components/LogoutButton'
 import { default as default_4538e12026942134a4f829e6f6f521ff } from '../../../payload/components/AnalyticNavLink'
 import { ImportExportProvider as ImportExportProvider_cdf7e044479f899a31f804427d568b36 } from '@payloadcms/plugin-import-export/rsc'
@@ -52,6 +53,7 @@ export const importMap = {
   "@payloadcms/plugin-import-export/rsc#ExportSaveButton": ExportSaveButton_cdf7e044479f899a31f804427d568b36,
   "@payloadcms/plugin-import-export/rsc#ImportPreview": ImportPreview_cdf7e044479f899a31f804427d568b36,
   "@payloadcms/plugin-import-export/rsc#ImportSaveButton": ImportSaveButton_cdf7e044479f899a31f804427d568b36,
+  "/payload/components/AdminLogo#default": default_564bf34304abb38917a0b375396d43e6,
   "/payload/components/LogoutButton#default": default_7c0525bf499ee6ddfb90ddfff60da17e,
   "/payload/components/AnalyticNavLink#default": default_4538e12026942134a4f829e6f6f521ff,
   "@payloadcms/plugin-import-export/rsc#ImportExportProvider": ImportExportProvider_cdf7e044479f899a31f804427d568b36,
