@@ -59,7 +59,7 @@ export function DesktopMenu() {
                 {isActive && (
                   <motion.div
                     layoutId="nav-indicator"
-                    className="absolute bottom-0 left-4 right-4 h-[2px] bg-primary rounded-full"
+                    className="absolute -bottom-5 left-4 right-4 h-[4px] bg-primary rounded-full"
                     transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                   />
                 )}
@@ -141,7 +141,7 @@ export function MobileMenu() {
                   variants={containerVariants}
                   initial="hidden"
                   animate="show"
-                  className="p-3 space-y-"
+                  className="p-3 space-y-1"
                 >
                   {navItems.map((item) => (
                     <motion.li key={item.href} variants={itemVariants}>

@@ -1,4 +1,5 @@
 import { draftMode } from 'next/headers'
+import { cache } from 'react'
 
 import HeroSection from '@/components/home/hero-section'
 import { TypeSection, BrandSection } from '@/components/home/category-section'
@@ -8,19 +9,66 @@ import TestimonialSection from '@/components/home/testimonial-section'
 import CtaSection from '@/components/home/cta-section'
 import { getPayloadClient } from '@/lib/payload'
 
-export default async function HomePage() {
-  const { isEnabled } = await draftMode()
+// Cache the available cars query
+const getAvailableCars = cache(async (draft: boolean) => {
   const payload = await getPayloadClient()
-  const carsResult = await payload.find({
-    draft: isEnabled,
+  return await payload.find({
+    draft,
     collection: 'cars',
     where: { 'analytics.status': { equals: 'available' } },
     sort: '-createdAt',
-    limit: 8,
+    limit: 100, // Fetch up to 100 cars
     depth: 1,
   })
+})
 
+export default async function HomePage() {
+  const { isEnabled } = await draftMode()
+  
+  const carsResult = await getAvailableCars(isEnabled)
+  const cars = carsResult.docs
   const totalCars = carsResult.totalDocs
+
+  // Extract unique brands and types dynamically in memory
+  const brandsMap = new Map()
+  const typesMap = new Map()
+
+  for (const car of cars) {
+    if (car.carBrand && typeof car.carBrand === 'object') {
+      const brand = car.carBrand
+      if (!brandsMap.has(brand.id)) {
+        brandsMap.set(brand.id, {
+          id: brand.id,
+          title: brand.title,
+          icon: brand.icon,
+          count: 1,
+        })
+      } else {
+        brandsMap.get(brand.id).count++
+      }
+    }
+
+    if (car.carType && typeof car.carType === 'object') {
+      const type = car.carType
+      if (!typesMap.has(type.id)) {
+        typesMap.set(type.id, {
+          id: type.id,
+          title: type.title,
+          icon: type.icon,
+          count: 1,
+        })
+      } else {
+        typesMap.get(type.id).count++
+      }
+    }
+  }
+
+  // Sort by count descending
+  const brands = Array.from(brandsMap.values()).sort((a, b) => b.count - a.count)
+  const types = Array.from(typesMap.values()).sort((a, b) => b.count - a.count)
+
+  // Only take first 8 cars for the featured section
+  const featuredCars = cars.slice(0, 8)
 
   return (
     <div className="space-y-10 py-4">
@@ -28,11 +76,11 @@ export default async function HomePage() {
       <HeroSection totalCars={totalCars} />
 
       {/* Category Browse */}
-      <TypeSection />
-      <BrandSection />
+      <TypeSection types={types} />
+      <BrandSection brands={brands} />
 
       {/* Featured Cars */}
-      <FeaturedCars cars={carsResult.docs} />
+      <FeaturedCars cars={featuredCars} />
 
       {/* Dealer Advantages */}
       <AdvantagesSection />
@@ -44,7 +92,7 @@ export default async function HomePage() {
       <CtaSection />
 
       {/* Structured Data: ItemList */}
-      {carsResult.docs.length > 0 && (
+      {featuredCars.length > 0 && (
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -52,8 +100,8 @@ export default async function HomePage() {
               '@context': 'https://schema.org',
               '@type': 'ItemList',
               name: 'Mobil Pilihan',
-              numberOfItems: carsResult.docs.length,
-              itemListElement: carsResult.docs.map((car, i) => ({
+              numberOfItems: featuredCars.length,
+              itemListElement: featuredCars.map((car, i) => ({
                 '@type': 'ListItem',
                 position: i + 1,
                 name: car.title,

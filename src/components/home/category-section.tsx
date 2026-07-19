@@ -12,17 +12,9 @@ function getImageUrl(icon: CarType['icon'] | CarBrand['icon']): string | null {
 }
 
 // ─── Lazy Image dengan IntersectionObserver ───────────────────────────────────
-function LazyIcon({
-  imgUrl,
-  title,
-  size = 12,
-}: {
-  imgUrl: string | null
-  title: string
-  size?: number
-}) {
-  const ref = useRef<HTMLDivElement>(null)
+function LazyIcon({ imgUrl, title, size }: { imgUrl: string | null; title: string; size: number }) {
   const [visible, setVisible] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const el = ref.current
@@ -96,23 +88,8 @@ function HorizontalGrid({
 }
 
 // ─── TypeSection ──────────────────────────────────────────────────────────────
-export function TypeSection() {
-  const [type, setTypes] = useState<any[]>([])
-  useEffect(() => {
-    const fetchFilters = async () => {
-      try {
-        const res = await fetch('/api/car-filters')
-        const { types: typesData } = await res.json()
-
-        setTypes(typesData || [])
-      } catch (err) {
-        console.error(err)
-      }
-    }
-
-    fetchFilters()
-  }, [])
-  // if (!types.length) return null
+export function TypeSection({ types }: { types: CarType[] }) {
+  if (!types || !types.length) return null
   return (
     <section className="space-y-4">
       <div>
@@ -121,7 +98,7 @@ export function TypeSection() {
       </div>
 
       <HorizontalGrid cols={1} itemWidth={120}>
-        {type.map((type) => (
+        {types.map((type) => (
           <Link
             key={type.id}
             href={`/cars?type=${type.title}`}
@@ -140,24 +117,8 @@ export function TypeSection() {
 }
 
 // ─── BrandSection ─────────────────────────────────────────────────────────────
-export function BrandSection() {
-  const [brands, setBrands] = useState<any[]>([])
-  useEffect(() => {
-    const fetchFilters = async () => {
-      try {
-        const res = await fetch('/api/car-filters')
-        const { brands: brandsData } = await res.json()
-
-        setBrands(brandsData || [])
-      } catch (err) {
-        console.error(err)
-      }
-    }
-
-    fetchFilters()
-  }, [])
-
-  // if (!brands.length) return null
+export function BrandSection({ brands }: { brands: CarBrand[] }) {
+  if (!brands || !brands.length) return null
   return (
     <section className="space-y-4">
       <div>

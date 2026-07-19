@@ -20,11 +20,19 @@ export default async function HeroSection({ totalCars }: { totalCars: number }) 
       id="heroSection"
       className="relative overflow-hidden rounded-2xl bg-linear-to-br from-primary/95 via-primary to-primary/80 text-primary-foreground"
     >
+      {/* Background Image / Backdrop */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/bgcard.png"
+        alt="Hero Background"
+        className="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-overlay pointer-events-none select-none"
+      />
+
       {/* Decorative elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-white/5 blur-3xl" />
         <div className="absolute -bottom-32 -left-32 w-80 h-80 rounded-full bg-white/5 blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-white/2" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-200 rounded-full bg-white/2" />
       </div>
 
       <div className="relative px-6 py-12 md:px-12 md:py-20">

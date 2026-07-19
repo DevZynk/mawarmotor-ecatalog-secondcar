@@ -3,17 +3,25 @@ import './styles.css'
 import Navbar from '@/components/navbar/navbar'
 import Footer from '@/components/footer/footer'
 import WhatsAppFloat from '@/components/shared/whatsapp-float'
-import { Plus_Jakarta_Sans } from 'next/font/google'
+import { Oxanium, DM_Sans, JetBrains_Mono } from 'next/font/google'
 import { SiteProvider } from '@/context/site-context'
 import { getPayloadClient } from '@/lib/payload'
 import { RefreshRouteOnSave } from '@/components/live-preview'
 import { LenisProvider } from '@/components/provider/lenis'
 
-const jakarta = Plus_Jakarta_Sans({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'],
-  variable: '--font-jakarta',
-  display: 'swap',
+const oxanium = Oxanium({
+  subsets: ["latin"],
+  variable: "--font-oxanium",
+})
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  variable: "--font-dm-sans",
+})
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains-mono",
 })
 
 export const revalidate = 60
@@ -139,7 +147,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link rel="license" href="https://hztech.id" />
       </head>
 
-      <body className={`${jakarta.className} bg-background scroll-smooth relative`}>
+      <body className={`${oxanium.variable} ${dmSans.variable} ${jetbrainsMono.variable} bg-background`}>
         {/* Website Developed by
 
 HZ Tech

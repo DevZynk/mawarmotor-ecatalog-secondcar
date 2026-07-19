@@ -360,7 +360,7 @@ export default async function CarDetailPage({ params }: { params: Promise<{ slug
                 </div>
 
                 {/* Description */}
-                <p className="text-sm text-muted-foreground leading-relaxed">{car.description}</p>
+                <p className="typeset text-muted-foreground">{car.description}</p>
 
                 {/* Desktop CTA */}
                 <div className="hidden md:flex gap-3">
