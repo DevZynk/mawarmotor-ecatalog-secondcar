@@ -13,30 +13,28 @@ import {
   PopoverTitle,
   PopoverTrigger,
 } from '@/components/ui/popover'
+import { Button } from '../ui/button'
 
 export default function WishlistButton() {
   const { items, count, remove, clear } = useWishlist()
 
   return (
     <Popover>
-      <PopoverTrigger
-        className="relative inline-flex shrink-0 items-center justify-center rounded-full border border-border bg-background hover:bg-muted hover:text-foreground size-9 transition-all outline-none"
-        aria-label={`Wishlist (${count} mobil)`}
-      >
-        <HeartIcon size={18} />
-        {count > 0 && (
-          <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] rounded-full bg-primary text-primary-foreground text-[10px] font-bold flex items-center justify-center px-1">
-            {count}
-          </span>
-        )}
+      <PopoverTrigger asChild aria-label={`Wishlist (${count} mobil)`}>
+        <Button className="relative" variant="ghost" size={"icon-lg"}>
+          <HeartIcon size={18} />
+          {count > 0 && (
+            <span className="absolute -top-0.5 -right-0.5 min-w-4 h-4 rounded-full bg-primary text-primary-foreground text-[9px] font-bold flex items-center justify-center px-1">
+              {count}
+            </span>
+          )}
+        </Button>
       </PopoverTrigger>
 
       <PopoverContent side="bottom" align="end" className="w-80 mt-5">
         <PopoverHeader>
           <div className="flex items-center justify-between">
-            <PopoverTitle className="text-sm font-semibold">
-              Wishlist ({count})
-            </PopoverTitle>
+            <PopoverTitle className="text-sm font-semibold">Wishlist ({count})</PopoverTitle>
             {count > 0 && (
               <button
                 onClick={clear}
@@ -46,9 +44,7 @@ export default function WishlistButton() {
               </button>
             )}
           </div>
-          <PopoverDescription className="text-xs">
-            Mobil yang Anda simpan
-          </PopoverDescription>
+          <PopoverDescription className="text-xs">Mobil yang Anda simpan</PopoverDescription>
         </PopoverHeader>
 
         {count === 0 ? (
@@ -85,7 +81,9 @@ export default function WishlistButton() {
                 {/* Info */}
                 <Link href={`/cars/${item.slug}`} className="flex-1 min-w-0">
                   <p className="text-xs font-medium truncate">{item.title}</p>
-                  <p className="text-[10px] font-semibold text-primary">{formatRupiah(item.price)}</p>
+                  <p className="text-[10px] font-semibold text-primary">
+                    {formatRupiah(item.price)}
+                  </p>
                 </Link>
 
                 {/* Remove */}
