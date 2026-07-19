@@ -12,6 +12,7 @@ const nextConfig: NextConfig = {
   },
   poweredByHeader: false,
   images: {
+    qualities: [75, 80],
     localPatterns: [
       {
         pathname: '/api/media/file/**',
