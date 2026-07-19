@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import Image from 'next/image'
+import { ImageBox } from '@inoo-ch/payload-image-optimizer/frontend'
 import {
   MagnifyingGlassIcon,
   XIcon,
@@ -25,6 +25,7 @@ import {
 } from '@/components/ui/command'
 import { cn } from '@/lib/utils'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
+import { useSite } from '@/context/site-context'
 
 // ── Types ────────────────────────────────────────────────
 
@@ -114,8 +115,7 @@ export default function SearchModal() {
   const [loading, setLoading] = useState(false)
   const [showFilters, setShowFilters] = useState(false)
   const [filters, setFilters] = useState<SearchFilters>(DEFAULT_FILTERS)
-  const [brands, setBrands] = useState<{ value: string; label: string }[]>([])
-  const [types, setTypes] = useState<{ value: string; label: string }[]>([])
+  const { brands, types } = useSite()
   const [brandOpen, setBrandOpen] = useState(false)
   const [typeOpen, setTypeOpen] = useState(false)
   const [fuelOpen, setFuelOpen] = useState(false)
@@ -137,36 +137,7 @@ export default function SearchModal() {
     }
   }, [open])
 
-  useEffect(() => {
-    if (!open) return
 
-    const fetchFilters = async () => {
-      try {
-        const res = await fetch('/api/car-filters')
-        const { brands: brandsData, types: typesData } = await res.json()
-
-        setBrands([
-          { value: '', label: 'Semua' },
-          ...(brandsData || []).map((b: any) => ({
-            value: String(b.id),
-            label: b.title,
-          })),
-        ])
-
-        setTypes([
-          { value: '', label: 'Semua' },
-          ...(typesData || []).map((t: any) => ({
-            value: String(t.id),
-            label: t.title,
-          })),
-        ])
-      } catch (err) {
-        console.error('Failed fetch filters:', err)
-      }
-    }
-
-    fetchFilters()
-  }, [open])
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -596,8 +567,8 @@ export default function SearchModal() {
               {/* Thumbnail */}
               <div className="relative w-20 h-14 rounded-lg bg-muted overflow-hidden shrink-0">
                 {car.image ? (
-                  <Image
-                    src={car.image}
+                  <ImageBox
+                    media={car.image}
                     alt={car.title}
                     fill
                     sizes="80px"

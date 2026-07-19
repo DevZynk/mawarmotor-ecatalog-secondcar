@@ -1,10 +1,11 @@
 'use client'
 
-import Image from 'next/image'
+import { ImageBox } from '@inoo-ch/payload-image-optimizer/frontend'
 import Link from 'next/link'
 import { useRef, useEffect, useState } from 'react'
 import type { CarType, CarBrand } from '@/payload-types'
 import _ from 'lodash'
+import { Card } from '../ui/card'
 
 function getImageUrl(icon: CarType['icon'] | CarBrand['icon']): string | null {
   if (typeof icon === 'object' && icon !== null) return icon.url || null
@@ -38,7 +39,13 @@ function LazyIcon({ imgUrl, title, size }: { imgUrl: string | null; title: strin
       className={`relative w-${size} h-${size} rounded-full bg-muted flex items-center justify-center overflow-hidden`}
     >
       {visible && imgUrl ? (
-        <Image src={imgUrl} alt={title} width={40} height={40} className="object-contain p-1" />
+        <ImageBox
+          media={imgUrl}
+          alt={title}
+          width={40}
+          height={40}
+          className="object-contain p-1"
+        />
       ) : (
         <span className={`${size <= 10 ? 'text-sm' : 'text-lg'} font-bold text-muted-foreground`}>
           {title?.[0]}
@@ -99,17 +106,18 @@ export function TypeSection({ types }: { types: CarType[] }) {
 
       <HorizontalGrid cols={1} itemWidth={120}>
         {types.map((type) => (
-          <Link
-            key={type.id}
-            href={`/cars?type=${type.title}`}
-            className="group flex flex-col items-center gap-2 rounded-sm border bg-card p-3 hover:border-primary hover:shadow-md transition-all"
-            style={{ width: 120 }}
-          >
-            <LazyIcon imgUrl={getImageUrl(type.icon)} title={type.title || ''} size={10} />
-            <h5 className="text-xs font-medium text-center text-foreground group-hover:text-primary transition-colors wrap-break-word overflow-hidden">
-              {_.startCase(type.title!)}
-            </h5>
-          </Link>
+          <Card key={type.id}>
+            <Link
+              href={`/cars?type=${type.title}`}
+              className="group flex flex-col items-center gap-2 p-3 transition-all"
+              style={{ width: 120 }}
+            >
+              <LazyIcon imgUrl={getImageUrl(type.icon)} title={type.title || ''} size={10} />
+              <h5 className="text-xs font-medium text-center text-foreground group-hover:text-primary transition-colors wrap-break-word overflow-hidden">
+                {_.startCase(type.title!)}
+              </h5>
+            </Link>
+          </Card>
         ))}
       </HorizontalGrid>
     </section>
@@ -130,17 +138,18 @@ export function BrandSection({ brands }: { brands: CarBrand[] }) {
 
       <HorizontalGrid cols={1} itemWidth={120}>
         {brands.map((brand) => (
-          <Link
-            key={brand.id}
-            href={`/cars?brand=${brand.title}`}
-            className="group flex flex-col items-center gap-2 rounded-sm border bg-card p-3 hover:border-primary hover:shadow-md transition-all"
-            style={{ width: 120 }}
-          >
-            <LazyIcon imgUrl={getImageUrl(brand.icon)} title={brand.title || ''} size={10} />
-            <h5 className="text-xs font-medium text-center text-foreground group-hover:text-primary transition-colors wrap-break-word overflow-hidden">
-              {brand.title}
-            </h5>
-          </Link>
+          <Card key={brand.id}>
+            <Link
+              href={`/cars?brand=${brand.title}`}
+             className="group flex flex-col items-center gap-2 p-3 transition-all"
+              style={{ width: 120 }}
+            >
+              <LazyIcon imgUrl={getImageUrl(brand.icon)} title={brand.title || ''} size={10} />
+              <h5 className="text-xs font-medium text-center text-foreground group-hover:text-primary transition-colors wrap-break-word overflow-hidden">
+                {brand.title}
+              </h5>
+            </Link>
+          </Card>
         ))}
       </HorizontalGrid>
     </section>

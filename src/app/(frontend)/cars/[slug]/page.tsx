@@ -27,6 +27,7 @@ import StickyCTA from '@/components/product/sticky-cta'
 import formatRupiah from '@/lib/formatRupiah'
 import MediaGallery from '@/components/gallery'
 import type { MediaItem } from '@/components/gallery/types'
+import { ButtonGroup } from '@/components/ui/button-group'
 // ── Helpers ──────────────────────────────────────────────
 
 function getTransLabel(t: string) {
@@ -363,7 +364,7 @@ export default async function CarDetailPage({ params }: { params: Promise<{ slug
                 <p className="typeset text-muted-foreground">{car.description}</p>
 
                 {/* Desktop CTA */}
-                <div className="hidden md:flex gap-3">
+                <div className="flex gap-3  md:hidden">
                   <Link
                     href={`https://wa.me/${site.social?.whatsapp?.replace(/\D/g, '')}?text=${encodeURIComponent(
                       `Halo ${site.siteName}, saya tertarik dengan mobil ${car.title} (${process.env.NEXT_PUBLIC_APP_URL}/cars/${car.slug}).
@@ -477,29 +478,32 @@ Mohon informasinya ya, terima kasih`,
                 </div>
               </div>
 
-              <div className="border-t pt-4 space-y-2">
-                <Link
-                  href={`https://wa.me/${site.social?.whatsapp?.replace(/\D/g, '')}?text=${encodeURIComponent(
-                    `Halo ${site.siteName}, saya tertarik dengan mobil ${car.title} (${process.env.NEXT_PUBLIC_APP_URL}/cars/${car.slug}).
-
-Saya ingin menanyakan:
-• Apakah unit ini masih tersedia?
-• Bisa dibantu simulasi kredit / cash price?
-• Detail DP dan cicilan per bulan?
-
-Mohon informasinya ya, terima kasih`,
-                  )}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button className="w-full font-semibold">Hubungi WhatsApp</Button>
-                </Link>
-                <Link href="#finance">
-                  <Button variant="outline" className="w-full font-semibold">
+              <ButtonGroup className="w-full" orientation={'vertical'}>
+                <Button className="w-full font-semibold">
+                  <Link
+                    href={`https://wa.me/${site.social?.whatsapp?.replace(/\D/g, '')}?text=${encodeURIComponent(
+                      `Halo ${site.siteName}, saya tertarik dengan mobil ${car.title} (${process.env.NEXT_PUBLIC_APP_URL}/cars/${car.slug}).
+                        
+                        Saya ingin menanyakan:
+                        • Apakah unit ini masih tersedia?
+                        • Bisa dibantu simulasi kredit / cash price?
+                        • Detail DP dan cicilan per bulan?
+                        
+                        Mohon informasinya ya, terima kasih`,
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1"
+                  >
+                    Hubungi via WhatsApp
+                  </Link>
+                </Button>
+                <Button variant="outline" className="w-full font-semibold">
+                  <Link href="#finance" className="flex-1">
                     Simulasi Kredit
-                  </Button>
-                </Link>
-              </div>
+                  </Link>
+                </Button>
+              </ButtonGroup>
 
               {/* Internal links for SEO */}
               <div className="border-t pt-3 text-xs space-y-1">

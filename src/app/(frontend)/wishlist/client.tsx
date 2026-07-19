@@ -1,7 +1,7 @@
 'use client'
 
 import { useWishlist } from '@/hooks/use-wishlist'
-import Image from 'next/image'
+import { ImageBox } from '@inoo-ch/payload-image-optimizer/frontend'
 import Link from 'next/link'
 import { Heart, Trash, ArrowRight, Info } from '@phosphor-icons/react'
 import formatRupiah from '@/lib/formatRupiah'
@@ -68,8 +68,8 @@ export default function WishlistClient() {
               {/* 4/3 */}
               <Link href={`/cars/${car.slug}`} className="relative w-full aspect-4/3 rounded-t-xl overflow-hidden block">
                 {car.image ? (
-                  <Image
-                    src={car.image}
+                  <ImageBox
+                    media={car.image}
                     alt={car.title}
                     fill
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"

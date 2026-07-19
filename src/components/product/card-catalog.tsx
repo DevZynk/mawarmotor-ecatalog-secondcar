@@ -1,7 +1,7 @@
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import formatRupiah from '@/lib/formatRupiah'
 import { Fuel, Gauge, ArrowRight } from 'lucide-react'
-import Image from 'next/image'
+import { ImageBox } from '@inoo-ch/payload-image-optimizer/frontend'
 import Link from 'next/link'
 import CarWishlist from './car-wishlist'
 
@@ -41,11 +41,11 @@ export default function CardCatalog({
           {/* 4/3 */}
           <div className="relative w-full aspect-4/3 rounded-xl overflow-hidden">
             {image ? (
-              <Image
-                src={image}
+              <ImageBox
+                media={image}
                 alt={title || 'Mobil'}
                 fill
-                sizes="full"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
             ) : (

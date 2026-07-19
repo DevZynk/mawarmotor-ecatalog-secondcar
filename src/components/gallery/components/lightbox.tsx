@@ -1,7 +1,7 @@
 'use client'
 
 import { Dialog, DialogContent } from '@/components/ui/dialog'
-import Image from 'next/image'
+import { ImageBox } from '@inoo-ch/payload-image-optimizer/frontend'
 import { useState, useEffect } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import type { MediaItem } from '../types'
@@ -44,8 +44,8 @@ export function Lightbox({
       <DialogContent className="w-[90vw] max-w-[90vw] h-[90vh] p-0 bg-black border-none">
         <div className="relative w-full h-full flex items-center justify-center">
           {item.type === 'photo' ? (
-            <Image
-              src={item.src}
+            <ImageBox
+              media={item.src}
               alt={item.alt}
               width={item.width || 1200}
               height={item.height || 800}

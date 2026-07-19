@@ -73,7 +73,6 @@ export interface Config {
     carBrands: CarBrand;
     carTypes: CarType;
     carsgallery: Carsgallery;
-    rents: Rent;
     exports: Export;
     imports: Import;
     'payload-kv': PayloadKv;
@@ -90,7 +89,6 @@ export interface Config {
     carBrands: CarBrandsSelect<false> | CarBrandsSelect<true>;
     carTypes: CarTypesSelect<false> | CarTypesSelect<true>;
     carsgallery: CarsgallerySelect<false> | CarsgallerySelect<true>;
-    rents: RentsSelect<false> | RentsSelect<true>;
     exports: ExportsSelect<false> | ExportsSelect<true>;
     imports: ImportsSelect<false> | ImportsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
@@ -108,12 +106,14 @@ export interface Config {
     hero: Hero;
     review: Review;
     advantage: Advantage;
+    'image-optimizer-state': ImageOptimizerState;
   };
   globalsSelect: {
     site: SiteSelect<false> | SiteSelect<true>;
     hero: HeroSelect<false> | HeroSelect<true>;
     review: ReviewSelect<false> | ReviewSelect<true>;
     advantage: AdvantageSelect<false> | AdvantageSelect<true>;
+    'image-optimizer-state': ImageOptimizerStateSelect<false> | ImageOptimizerStateSelect<true>;
   };
   locale: null;
   widgets: {
@@ -122,6 +122,7 @@ export interface Config {
   user: User;
   jobs: {
     tasks: {
+      imageOptimizer_regenerateDocument: TaskImageOptimizerRegenerateDocument;
       createCollectionExport: TaskCreateCollectionExport;
       createCollectionImport: TaskCreateCollectionImport;
       inline: {
@@ -184,6 +185,13 @@ export interface User {
 export interface Media {
   id: number;
   alt?: string | null;
+  imageOptimizer?: {
+    thumbHash?: string | null;
+    originalSize?: number | null;
+    optimizedSize?: number | null;
+    status?: ('complete' | 'error') | null;
+    error?: string | null;
+  };
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -353,6 +361,13 @@ export interface CarType {
 export interface Carsgallery {
   id: number;
   alt?: string | null;
+  imageOptimizer?: {
+    thumbHash?: string | null;
+    originalSize?: number | null;
+    optimizedSize?: number | null;
+    status?: ('complete' | 'error') | null;
+    error?: string | null;
+  };
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -390,58 +405,6 @@ export interface Carsgallery {
       filename?: string | null;
     };
   };
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "rents".
- */
-export interface Rent {
-  id: number;
-  title: string;
-  slug: string;
-  carBrand?: (number | null) | CarBrand;
-  carType?: (number | null) | CarType;
-  rentalType?: ('lepas_kunci' | 'with_driver') | null;
-  status: 'available' | 'rented' | 'service';
-  pricing?: {
-    daily?: number | null;
-    weekly?: number | null;
-    monthly?: number | null;
-    yearly?: number | null;
-  };
-  availability?: {
-    nextAvailableDate?: string | null;
-    estimatedDays?: number | null;
-  };
-  bookings?:
-    | {
-        customerName?: string | null;
-        startDate: string;
-        endDate: string;
-        status?: ('active' | 'completed' | 'cancelled') | null;
-        id?: string | null;
-      }[]
-    | null;
-  carSpecification: {
-    engine: number;
-    passenger?: number | null;
-    transmission: 'manual' | 'at' | 'cvt' | 'dct' | 'amt';
-    fuel: 'bensin' | 'solar' | 'listrik' | 'hybrid';
-    color?: string | null;
-    registrationYear?: number | null;
-    buildYear?: number | null;
-  };
-  gallery?:
-    | {
-        image?: (number | null) | Carsgallery;
-        tag?: ('exterior' | 'interior' | 'engine') | null;
-        isFeatured?: boolean | null;
-        id?: string | null;
-      }[]
-    | null;
-  description: string;
-  updatedAt: string;
-  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -586,7 +549,7 @@ export interface PayloadJob {
     | {
         executedAt: string;
         completedAt: string;
-        taskSlug: 'inline' | 'createCollectionExport' | 'createCollectionImport';
+        taskSlug: 'inline' | 'imageOptimizer_regenerateDocument' | 'createCollectionExport' | 'createCollectionImport';
         taskID: string;
         input?:
           | {
@@ -619,7 +582,9 @@ export interface PayloadJob {
         id?: string | null;
       }[]
     | null;
-  taskSlug?: ('inline' | 'createCollectionExport' | 'createCollectionImport') | null;
+  taskSlug?:
+    | ('inline' | 'imageOptimizer_regenerateDocument' | 'createCollectionExport' | 'createCollectionImport')
+    | null;
   queue?: string | null;
   waitUntil?: string | null;
   processing?: boolean | null;
@@ -656,10 +621,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'carsgallery';
         value: number | Carsgallery;
-      } | null)
-    | ({
-        relationTo: 'rents';
-        value: number | Rent;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -733,6 +694,15 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
+  imageOptimizer?:
+    | T
+    | {
+        thumbHash?: T;
+        originalSize?: T;
+        optimizedSize?: T;
+        status?: T;
+        error?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -910,6 +880,15 @@ export interface CarTypesSelect<T extends boolean = true> {
  */
 export interface CarsgallerySelect<T extends boolean = true> {
   alt?: T;
+  imageOptimizer?:
+    | T
+    | {
+        thumbHash?: T;
+        originalSize?: T;
+        optimizedSize?: T;
+        status?: T;
+        error?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -955,63 +934,6 @@ export interface CarsgallerySelect<T extends boolean = true> {
               filename?: T;
             };
       };
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "rents_select".
- */
-export interface RentsSelect<T extends boolean = true> {
-  title?: T;
-  slug?: T;
-  carBrand?: T;
-  carType?: T;
-  rentalType?: T;
-  status?: T;
-  pricing?:
-    | T
-    | {
-        daily?: T;
-        weekly?: T;
-        monthly?: T;
-        yearly?: T;
-      };
-  availability?:
-    | T
-    | {
-        nextAvailableDate?: T;
-        estimatedDays?: T;
-      };
-  bookings?:
-    | T
-    | {
-        customerName?: T;
-        startDate?: T;
-        endDate?: T;
-        status?: T;
-        id?: T;
-      };
-  carSpecification?:
-    | T
-    | {
-        engine?: T;
-        passenger?: T;
-        transmission?: T;
-        fuel?: T;
-        color?: T;
-        registrationYear?: T;
-        buildYear?: T;
-      };
-  gallery?:
-    | T
-    | {
-        image?: T;
-        tag?: T;
-        isFeatured?: T;
-        id?: T;
-      };
-  description?: T;
-  updatedAt?: T;
-  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1195,6 +1117,7 @@ export interface Hero {
   id: number;
   title: string;
   subTitle: string;
+  backgroundImage?: (number | null) | Media;
   /**
    * Pesan default untuk tombol WhatsApp
    */
@@ -1286,6 +1209,24 @@ export interface Advantage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "image-optimizer-state".
+ */
+export interface ImageOptimizerState {
+  id: number;
+  collections?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site_select".
  */
 export interface SiteSelect<T extends boolean = true> {
@@ -1344,6 +1285,7 @@ export interface SiteSelect<T extends boolean = true> {
 export interface HeroSelect<T extends boolean = true> {
   title?: T;
   subTitle?: T;
+  backgroundImage?: T;
   whatsappMessage?: T;
   advantages?:
     | T
@@ -1398,6 +1340,16 @@ export interface AdvantageSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "image-optimizer-state_select".
+ */
+export interface ImageOptimizerStateSelect<T extends boolean = true> {
+  collections?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "collections_widget".
  */
 export interface CollectionsWidget {
@@ -1408,6 +1360,20 @@ export interface CollectionsWidget {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskImageOptimizer_regenerateDocument".
+ */
+export interface TaskImageOptimizerRegenerateDocument {
+  input: {
+    collectionSlug: string;
+    docId: string;
+  };
+  output: {
+    status?: string | null;
+    reason?: string | null;
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "TaskCreateCollectionExport".
  */
 export interface TaskCreateCollectionExport {
@@ -1415,16 +1381,7 @@ export interface TaskCreateCollectionExport {
     id: string;
     name: string;
     batchSize?: number | null;
-    collectionSlug:
-      | 'users'
-      | 'media'
-      | 'cars'
-      | 'carBrands'
-      | 'carTypes'
-      | 'carsgallery'
-      | 'rents'
-      | 'exports'
-      | 'imports';
+    collectionSlug: 'users' | 'media' | 'cars' | 'carBrands' | 'carTypes' | 'carsgallery' | 'exports' | 'imports';
     drafts?: ('yes' | 'no') | null;
     exportCollection: string;
     fields?: string[] | null;

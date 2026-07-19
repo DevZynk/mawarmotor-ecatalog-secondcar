@@ -9,7 +9,7 @@ export const Media: CollectionConfig = {
 
   admin: {
     group: 'Media',
-    hidden: () => !!isAdmin,
+    hidden: () => !isAdmin,
   },
   slug: 'media',
   access: {

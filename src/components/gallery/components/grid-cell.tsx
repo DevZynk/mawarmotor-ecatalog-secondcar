@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import { ImageBox } from '@inoo-ch/payload-image-optimizer/frontend'
 import { MediaItem } from '../types'
 import { cn } from '@/lib/utils'
 import { Play } from 'lucide-react'
@@ -22,8 +22,8 @@ export function GridCell({
         isFeatured ? 'md:col-span-2 aspect-video' : 'aspect-4/3',
       )}
     >
-      <Image
-        src={item.thumb}
+      <ImageBox
+        media={item.thumb}
         alt={item.alt}
         fill
         sizes="(max-width: 768px) 50vw, 33vw"

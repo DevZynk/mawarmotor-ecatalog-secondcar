@@ -2,7 +2,7 @@
 
 import { useWishlist } from '@/hooks/use-wishlist'
 import { HeartIcon, TrashIcon } from '@phosphor-icons/react'
-import Image from 'next/image'
+import { ImageBox } from '@inoo-ch/payload-image-optimizer/frontend'
 import Link from 'next/link'
 import formatRupiah from '@/lib/formatRupiah'
 import {
@@ -63,8 +63,8 @@ export default function WishlistButton() {
                 <Link href={`/cars/${item.slug}`} className="shrink-0">
                   <div className="relative w-24 h-16 p-2 border rounded-sm bg-muted overflow-hidden">
                     {item.image ? (
-                      <Image
-                        src={item.image}
+                      <ImageBox
+                        media={item.image}
                         alt={item.title}
                         fill
                         sizes="70px"

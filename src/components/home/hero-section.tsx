@@ -2,6 +2,8 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { getPayloadClient } from '@/lib/payload'
 import { Icon } from '../shared/icon'
+import { ImageBox } from '@inoo-ch/payload-image-optimizer/frontend'
+import bgCard from '../../../public/bgcard.png'
 
 export default async function HeroSection({ totalCars }: { totalCars: number }) {
   const payload = await getPayloadClient()
@@ -15,18 +17,26 @@ export default async function HeroSection({ totalCars }: { totalCars: number }) 
     ? `https://wa.me/${site.social?.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent(hero.whatsappMessage)}`
     : '#'
 
+  const backgroundImage = hero.backgroundImage
+  const backgroundImageUrl =
+    (backgroundImage && typeof backgroundImage === 'object'
+      ? backgroundImage.url
+      : null) || bgCard.src
+
   return (
     <section
       id="heroSection"
       className="relative overflow-hidden rounded-2xl bg-linear-to-br from-primary/50 via-primary to-primary/70 text-primary-foreground"
     >
-      {/* Background Image / Backdrop */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/bgcard.png"
-        alt="Hero Background"
-        className="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-overlay pointer-events-none select-none"
-      />
+      {backgroundImageUrl && (
+        <ImageBox
+          media={backgroundImageUrl}
+          alt="Hero Background"
+          fill
+          sizes="100vw"
+          className="object-cover opacity-50 mix-blend-overlay pointer-events-none select-none"
+        />
+      )}
 
       {/* Decorative elements */}
       <div className="absolute inset-0 overflow-hidden">
@@ -37,7 +47,7 @@ export default async function HeroSection({ totalCars }: { totalCars: number }) 
 
       <div className="relative px-6 py-12 md:px-12 md:py-20">
         <div className="max-w-2xl">
-          <div className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur px-4 py-1.5 text-xs font-medium mb-6">
+          <div className="inline-flex items-center gap-2 rounded-full bg-secondary text-secondary-foreground aria-expanded:text-secondary-foreground p-2 text-xs font-medium mb-6">
             <Icon name="CarIcon" size={14} weight="fill" />
             <span>{totalCars}+ Mobil Tersedia</span>
           </div>
@@ -46,7 +56,7 @@ export default async function HeroSection({ totalCars }: { totalCars: number }) 
             {hero.title}
           </h1>
 
-          <p className="mt-4 text-base md:text-lg text-primary-foreground/80 leading-relaxed max-w-xl">
+          <p className="mt-4 text-base md:text-lg text-secondary-foregro leading-relaxed max-w-xl">
             {hero.subTitle}
           </p>
 
@@ -54,7 +64,7 @@ export default async function HeroSection({ totalCars }: { totalCars: number }) 
             <Link href="/cars">
               <Button
                 size="lg"
-                className="bg-white text-primary hover:bg-white/90 font-semibold shadow-lg shadow-black/10"
+                variant="secondary"
               >
                 <Icon name="CarProfileIcon" size={18} weight="bold" />
                 Lihat Koleksi Mobil
@@ -64,8 +74,7 @@ export default async function HeroSection({ totalCars }: { totalCars: number }) 
             <Link href={waLink} target="_blank" rel="noopener noreferrer">
               <Button
                 size="lg"
-                variant="outline"
-                className="bg-white text-primary hover:bg-white/90 font-semibold shadow-lg shadow-black/10"
+                variant="secondary"
               >
                 <Icon name="WhatsappLogoIcon" size={18} weight="fill" />
                 Hubungi WhatsApp
@@ -85,7 +94,8 @@ export default async function HeroSection({ totalCars }: { totalCars: number }) 
           ].map((item) => (
             <div
               key={item.text}
-              className="flex items-center gap-2.5 rounded-xl bg-white/10 backdrop-blur px-4 py-3"
+              className="flex items-center gap-2.5 rounded-xl  px-4 py-3
+               bg-secondary text-secondary-foreground aria-expanded:bg-secondary aria-expanded:text-secondary-foreground"
             >
               <Icon name={item.icon} size={20} weight="fill" className="shrink-0" />
               <span className="text-sm font-medium">{item.text}</span>

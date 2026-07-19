@@ -34,6 +34,20 @@ const getSiteConfig = cache(async () => {
   })
 })
 
+const getAvailableCarsForFilters = cache(async () => {
+  const payload = await getPayloadClient()
+  return await payload.find({
+    collection: 'cars',
+    where: { 'analytics.status': { equals: 'available' } },
+    limit: -1,
+    depth: 1,
+    select: {
+      carBrand: true,
+      carType: true,
+    },
+  })
+})
+
 export async function generateMetadata() {
   const site = await getSiteConfig()
 
@@ -134,6 +148,45 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     facebook: site.social?.facebook || '',
   }
 
+  // Prefetch available cars for filters
+  const carsResult = await getAvailableCarsForFilters()
+  const cars = carsResult.docs
+
+  // Extract unique brands and types
+  const brandsMap = new Map()
+  const typesMap = new Map()
+
+  for (const car of cars) {
+    if (car.carBrand && typeof car.carBrand === 'object') {
+      const brand = car.carBrand
+      if (!brandsMap.has(brand.id)) {
+        brandsMap.set(brand.id, {
+          value: String(brand.id),
+          label: brand.title,
+        })
+      }
+    }
+
+    if (car.carType && typeof car.carType === 'object') {
+      const type = car.carType
+      if (!typesMap.has(type.id)) {
+        typesMap.set(type.id, {
+          value: String(type.id),
+          label: type.title,
+        })
+      }
+    }
+  }
+
+  const brands = [
+    { value: '', label: 'Semua Merek' },
+    ...Array.from(brandsMap.values()).sort((a, b) => a.label.localeCompare(b.label)),
+  ]
+  const types = [
+    { value: '', label: 'Semua Tipe' },
+    ...Array.from(typesMap.values()).sort((a, b) => a.label.localeCompare(b.label)),
+  ]
+
   return (
     <html lang="id" suppressHydrationWarning>
       <head>
@@ -160,7 +213,7 @@ Developer:
 Dheo Hilman Darmawan */}
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="light"
           enableSystem
           disableTransitionOnChange
         >
@@ -173,6 +226,8 @@ Dheo Hilman Darmawan */}
               logoUrl: logoUrl || '',
               alt: altText || '',
               social: social,
+              brands: brands,
+              types: types,
             }}
           >
             <LenisProvider>

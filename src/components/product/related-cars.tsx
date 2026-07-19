@@ -1,13 +1,8 @@
-import type { Car, Media } from '@/payload-types'
-import Image from 'next/image'
+import type { Car} from '@/payload-types'
+import { ImageBox } from '@inoo-ch/payload-image-optimizer/frontend'
 import Link from 'next/link'
 import { Gauge, Fuel } from 'lucide-react'
 import formatRupiah from '@/lib/formatRupiah'
-
-function getFeaturedImage(car: Car): string | null {
-  const featured = car.cardthumbnail
-  return typeof featured === 'object' ? featured.sizes?.card?.url || null : null
-}
 
 function getFuelLabel(f: string): string {
   const m: Record<string, string> = { bensin: 'Bensin', solar: 'Solar', listrik: 'Listrik', hybrid: 'Hybrid' }
@@ -25,7 +20,6 @@ export default function RelatedCars({ cars, currentSlug }: { cars: Car[]; curren
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {related.map((car) => {
-          const imageUrl = getFeaturedImage(car)
           return (
             <Link
               key={car.id}
@@ -33,9 +27,9 @@ export default function RelatedCars({ cars, currentSlug }: { cars: Car[]; curren
               className="group flex flex-col overflow-hidden rounded-xl border bg-card hover:shadow-md transition-all"
             >
               <div className="relative aspect-4/3 bg-muted overflow-hidden">
-                {imageUrl ? (
-                  <Image
-                    src={imageUrl}
+                {car.cardthumbnail && typeof car.cardthumbnail === 'object' ? (
+                  <ImageBox
+                    media={car.cardthumbnail}
                     alt={car.title}
                     fill
                     sizes="(max-width: 768px) 50vw, 25vw"

@@ -1,7 +1,7 @@
 "use client"
 
-import Image from "next/image"
-import Link from "next/link"
+import { ImageBox } from '@inoo-ch/payload-image-optimizer/frontend'
+import Link from 'next/link'
 import { useSite } from "@/context/site-context"
 
 export default function Logo() {
@@ -11,8 +11,8 @@ export default function Logo() {
     <Link href="/">
       <div className="flex items-center gap-2">
         {logoUrl && (
-          <Image
-            src={logoUrl}
+          <ImageBox
+            media={logoUrl}
             alt={alt}
             width={55}
             height={55}

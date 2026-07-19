@@ -14,9 +14,11 @@ type Site = {
   location: string
   logoUrl: string | null
   alt: string
-  social : Social
-  maps : string
-  address : string
+  social: Social
+  maps: string
+  address: string
+  brands: { value: string; label: string }[]
+  types: { value: string; label: string }[]
 }
 
 const SiteContext = createContext<Site | null>(null)

@@ -42,13 +42,18 @@ export function DesktopMenu() {
                 aria-current={isActive ? 'page' : undefined}
               >
                 {/* Hover Background Capsule */}
-                {hoveredIndex === index && (
-                  <motion.div
-                    layoutId="hover-capsule"
-                    className="absolute inset-0 bg-muted/60 rounded-lg"
-                    transition={{ type: 'spring', stiffness: 350, damping: 30 }}
-                  />
-                )}
+                <AnimatePresence>
+                  {hoveredIndex === index && (
+                    <motion.div
+                      layoutId="hover-capsule"
+                      className="absolute inset-0 bg-muted/60 rounded-lg"
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+                    />
+                  )}
+                </AnimatePresence>
 
                 <span className="relative z-10 flex items-center gap-1.5">
                   <item.icon size={18} weight={isActive ? 'fill' : 'regular'} />
@@ -56,13 +61,18 @@ export function DesktopMenu() {
                 </span>
 
                 {/* Active Indicator Underline */}
-                {isActive && (
-                  <motion.div
-                    layoutId="nav-indicator"
-                    className="absolute -bottom-5 left-4 right-4 h-[4px] bg-primary rounded-full"
-                    transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                  />
-                )}
+                <AnimatePresence>
+                  {isActive && (
+                    <motion.div
+                      layoutId="nav-indicator"
+                      className="absolute -bottom-5 left-4 right-4 h-[4px] bg-primary rounded-full"
+                      initial={{ opacity: 0, scaleX: 0 }}
+                      animate={{ opacity: 1, scaleX: 1 }}
+                      exit={{ opacity: 0, scaleX: 0 }}
+                      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                    />
+                  )}
+                </AnimatePresence>
               </Link>
             </li>
           )

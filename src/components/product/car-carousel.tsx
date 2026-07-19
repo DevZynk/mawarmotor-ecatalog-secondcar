@@ -7,7 +7,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel'
-import Image from 'next/image'
+import { ImageBox } from '@inoo-ch/payload-image-optimizer/frontend'
 import Autoplay from 'embla-carousel-autoplay'
 import { useState } from 'react'
 
@@ -49,8 +49,8 @@ export default function CarCarousel({ media }: CarCarouselProps) {
             <CarouselItem key={idx}>
               <div className="relative w-full aspect-video overflow-hidden  bg-black">
                 {item.type === 'image' ? (
-                  <Image
-                    src={item.url}
+                  <ImageBox
+                    media={item.url}
                     alt={item.alt || `media-${idx}`}
                     sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw'
                     fill

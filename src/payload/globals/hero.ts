@@ -29,6 +29,12 @@ export const Hero: GlobalConfig = {
       label: 'Sub Judul',
     },
     {
+      name:'backgroundImage',
+      label:'Background',
+      type: 'upload',
+      relationTo:'media',
+    },
+    {
       name: 'whatsappMessage',
       type: 'text',
       required: true,

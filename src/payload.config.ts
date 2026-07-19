@@ -13,7 +13,7 @@ import { CarBrands, Cars, CarTypes } from './payload/collections/Cars'
 import { Hero } from './payload/globals/hero'
 import { Review } from './payload/globals/review'
 import { Advantage } from './payload/globals/advantage'
-import { Rents } from './payload/collections/Rent'
+import { imageOptimizer, uuidFilename } from '@inoo-ch/payload-image-optimizer'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -27,20 +27,17 @@ export default buildConfig({
     },
 
     components: {
-      beforeNavLinks: [
-        '/payload/components/AnalyticNavLink',
-      ],
-      afterNavLinks:[ '/payload/components/LogoutButton'],
+      beforeNavLinks: ['/payload/components/AnalyticNavLink'],
+      afterNavLinks: ['/payload/components/LogoutButton'],
 
-      views: {          
+      views: {
         dashboard: {
           Component: '/payload/components/AnalyticDashboard',
-
         },
       },
     },
   },
-  collections: [Users, Media, Cars, CarBrands, CarTypes, CarsGallery, Rents],
+  collections: [Users, Media, Cars, CarBrands, CarTypes, CarsGallery],
   globals: [Site, Hero, Review, Advantage],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
@@ -54,6 +51,22 @@ export default buildConfig({
   }),
   sharp,
   plugins: [
+    imageOptimizer({
+      collections: {
+        media: true,
+        carsgallery: true,
+      },
+      format: { format: 'webp', quality: 80 },
+      maxDimensions: { width: 2560, height: 2560 },
+      generateThumbHash: true,
+      stripMetadata: true,
+      clientOptimization: true,
+      disabled: false,
+      generateFilename: uuidFilename,
+
+      adminThumbnail: 'auto',
+      metadataPolicy: ({ metadata }) => metadata.format === 'jpeg',
+    }),
     importExportPlugin({
       collections: [{ slug: 'cars' }],
       exportLimit: 0,

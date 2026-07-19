@@ -1,15 +1,10 @@
 import type { Car } from '@/payload-types'
-import Image from 'next/image'
+import { ImageBox } from '@inoo-ch/payload-image-optimizer/frontend'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
 import formatRupiah from '@/lib/formatRupiah'
 import { Gauge, Fuel, ArrowRight } from 'lucide-react'
 import _ from 'lodash'
-
-function getFeaturedImage(car: Car): string | null {
-  const featured = car.cardthumbnail
-  return typeof featured === 'object' ? featured.sizes?.card?.url || featured.url || null : null
-}
 
 export default function FeaturedCars({ cars }: { cars: Car[] }) {
   if (!cars.length) return null
@@ -31,7 +26,6 @@ export default function FeaturedCars({ cars }: { cars: Car[] }) {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {cars.map((car) => {
-          const imageUrl = getFeaturedImage(car)
           const brandName =
             typeof car.carBrand === 'object' && car.carBrand ? car.carBrand.title : null
 
@@ -43,9 +37,9 @@ export default function FeaturedCars({ cars }: { cars: Car[] }) {
             >
               {/* Image  4/3*/}
               <div className="relative aspect-4/3 bg-muted overflow-hidden">
-                {imageUrl ? (
-                  <Image
-                    src={imageUrl}
+                {car.cardthumbnail && typeof car.cardthumbnail === 'object' ? (
+                  <ImageBox
+                    media={car.cardthumbnail}
                     alt={`${car.title} - Dealer mobil bekas`}
                     fill
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"

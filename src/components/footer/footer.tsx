@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import Image from 'next/image'
+import { ImageBox } from '@inoo-ch/payload-image-optimizer/frontend'
 import { Icon } from '../shared/icon'
 import { getPayloadClient } from '@/lib/payload'
 
@@ -9,7 +9,6 @@ export default async function Footer() {
     slug: 'site',
   })
 
-  const logoUrl = (typeof logo === 'object' ? logo.sizes?.thumbnail?.url : null) || ''
   const logoAlt = (typeof logo === 'object' ? logo.alt : null) || (siteName as string)
 
   const currentYear = new Date().getFullYear()
@@ -21,14 +20,14 @@ export default async function Footer() {
           {/* Brand */}
           <div className="md:col-span-2 space-y-3">
             <div className="flex items-center gap-3">
-              {logo && (
-                <Image
-                  src={logoUrl}
-                  alt={logoAlt}
-                  width={50}
-                  height={50}
-                  className="rounded-full object-cover"
-                />
+              {logo && typeof logo === 'object' && (
+                <div className='w-50 h-50'>
+                  <ImageBox
+                    media={logo}
+                    alt={logoAlt}
+                    className="rounded-full object-cover"
+                  />
+                </div>
               )}
               <div>
                 <p className="font-bold text-foreground">{siteName}</p>
@@ -63,10 +62,8 @@ export default async function Footer() {
             <p className="text-sm font-semibold text-foreground">Navigasi</p>
             <nav className="flex flex-col gap-2">
               {[
-                { title: 'Beranda', icon: "HouseIcon", href: '/' },
-                { title: 'Mobil Bekas', icon: "CarProfileIcon", href: '/cars' },
-                // { href: '/rent', label: 'Sewa Mobil' },
-                // { href: '/news', label: 'Berita' },
+                { title: 'Beranda', icon: 'HouseIcon', href: '/' },
+                { title: 'Mobil Bekas', icon: 'CarProfileIcon', href: '/cars' },
               ].map((link) => (
                 <Link
                   key={link.href}
@@ -120,15 +117,16 @@ export default async function Footer() {
         {/* Copyright */}
         <div className="border-t mt-8 pt-6 text-center">
           <p className="text-xs text-muted-foreground">
-            © {currentYear} {siteName}. Designed & Developed by{" "}
-              <a
-                href="https://hztech.id"
-                target="_blank"
-                rel="noopener"
-                className="font-medium text-foreground hover:text-primary transition-colors underline decoration-dotted underline-offset-4"
-              >
-            HZ Tech
-        </a>.
+            © {currentYear} {siteName}. Designed & Developed by{' '}
+            <a
+              href="https://hztech.id"
+              target="_blank"
+              rel="noopener"
+              className="font-medium text-foreground hover:text-primary transition-colors underline decoration-dotted underline-offset-4"
+            >
+              HZ Tech
+            </a>
+            .
           </p>
         </div>
       </div>

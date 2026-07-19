@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react'
-import Image from 'next/image'
+import { ImageBox } from '@inoo-ch/payload-image-optimizer/frontend'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import {
@@ -139,11 +139,11 @@ export default function MediaGallery({
           <div className="relative group mx-5 rounded-xl overflow-hidden bg-black">
             <div className="relative w-full aspect-video">
               {activeItem.type === 'photo' ? (
-                <Image
-                  src={activeItem.src}
+                <ImageBox
+                  media={activeItem.src}
                   alt={activeItem.alt}
                   fill
-                  sizes="100%"
+                  sizes="100vw"
                   className="object-cover"
                   priority={activeIndex === 0}
                 />
@@ -220,8 +220,8 @@ export default function MediaGallery({
                   : 'opacity-60 hover:opacity-90 ring-1 ring-border',
               )}
             >
-              <Image
-                src={item.thumb}
+              <ImageBox
+                media={item.thumb}
                 alt={item.alt}
                 fill
                 sizes="80px"
@@ -296,8 +296,8 @@ export default function MediaGallery({
 
             {/* Content */}
             {activeItem.type === 'photo' ? (
-              <Image
-                src={activeItem.src}
+              <ImageBox
+                media={activeItem.src}
                 alt={activeItem.alt}
                 width={1280}
                 height={720}
