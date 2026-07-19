@@ -298,7 +298,7 @@ export default function SearchModal() {
       </DialogTrigger>
       <DialogContent
         showCloseButton={false}
-        className="fixed top-[5vh] left-1/2 -translate-x-1/2 translate-y-0 max-w-3xl w-full p-0 gap-0 bg-background border shadow-2xl overflow-hidden"
+        className="fixed top-[5vh] left-1/2 -translate-x-1/2 translate-y-0 sm:max-w-2xl w-full p-0 gap-0 bg-background border shadow-2xl overflow-hidden"
       >
         {/* Search input */}
         <div className="flex items-center gap-3 px-4 border-b">
