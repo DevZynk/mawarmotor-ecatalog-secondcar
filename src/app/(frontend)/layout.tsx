@@ -8,20 +8,21 @@ import { SiteProvider } from '@/context/site-context'
 import { getPayloadClient } from '@/lib/payload'
 import { RefreshRouteOnSave } from '@/components/live-preview'
 import { LenisProvider } from '@/components/provider/lenis'
+import { ThemeProvider } from '@/components/provider/theme'
 
 const oxanium = Oxanium({
-  subsets: ["latin"],
-  variable: "--font-oxanium",
+  subsets: ['latin'],
+  variable: '--font-oxanium',
 })
 
 const dmSans = DM_Sans({
-  subsets: ["latin"],
-  variable: "--font-dm-sans",
+  subsets: ['latin'],
+  variable: '--font-dm-sans',
 })
 
 const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-jetbrains-mono",
+  subsets: ['latin'],
+  variable: '--font-jetbrains-mono',
 })
 
 export const revalidate = 60
@@ -147,7 +148,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link rel="license" href="https://hztech.id" />
       </head>
 
-      <body className={`${oxanium.variable} ${dmSans.variable} ${jetbrainsMono.variable} bg-background`}>
+      <body
+        className={`${oxanium.variable} ${dmSans.variable} ${jetbrainsMono.variable} bg-background`}
+      >
         {/* Website Developed by
 
 HZ Tech
@@ -155,62 +158,68 @@ https://hztech.id
 
 Developer:
 Dheo Hilman Darmawan */}
-
-        <SiteProvider
-          value={{
-            siteName: site.siteName || '',
-            maps: site.maps || '',
-            address: site.address || '',
-            location: site.location || '',
-            logoUrl: logoUrl || '',
-            alt: altText || '',
-            social: social,
-          }}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
         >
-          <LenisProvider>
-            <script
-              type="application/ld+json"
-              dangerouslySetInnerHTML={{
-                __html: JSON.stringify({
-                  '@context': 'https://schema.org',
-                  '@type': 'AutoDealer',
-                  name: site.siteName,
-                  image: logoUrl,
-                  address: {
-                    '@type': 'PostalAddress',
-                    streetAddress: site.address,
-                    addressLocality: site.business?.city || site.location,
-                    addressRegion: site.business?.region,
-                    postalCode: site.business?.postalCode,
-                    addressCountry: 'ID',
-                  },
-                  geo:
-                    site.business?.latitude && site.business?.longitude
-                      ? {
-                          '@type': 'GeoCoordinates',
-                          latitude: site.business.latitude,
-                          longitude: site.business.longitude,
-                        }
-                      : undefined,
-                  url: site.domain,
-                  telephone: site.social?.whatsapp,
-                  sameAs: [
-                    site.social?.instagram,
-                    site.social?.tiktok,
-                    site.social?.facebook,
-                  ].filter(Boolean),
-                }),
-              }}
-            />
-            <RefreshRouteOnSave />
-            <Navbar />
-            <main className="w-full relative min-h-dvh">
-              <div className="w-full mt-20 max-w-6xl mx-auto px-4">{children}</div>
-            </main>
-            <Footer />
-            <WhatsAppFloat />
-          </LenisProvider>
-        </SiteProvider>
+          <SiteProvider
+            value={{
+              siteName: site.siteName || '',
+              maps: site.maps || '',
+              address: site.address || '',
+              location: site.location || '',
+              logoUrl: logoUrl || '',
+              alt: altText || '',
+              social: social,
+            }}
+          >
+            <LenisProvider>
+              <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                  __html: JSON.stringify({
+                    '@context': 'https://schema.org',
+                    '@type': 'AutoDealer',
+                    name: site.siteName,
+                    image: logoUrl,
+                    address: {
+                      '@type': 'PostalAddress',
+                      streetAddress: site.address,
+                      addressLocality: site.business?.city || site.location,
+                      addressRegion: site.business?.region,
+                      postalCode: site.business?.postalCode,
+                      addressCountry: 'ID',
+                    },
+                    geo:
+                      site.business?.latitude && site.business?.longitude
+                        ? {
+                            '@type': 'GeoCoordinates',
+                            latitude: site.business.latitude,
+                            longitude: site.business.longitude,
+                          }
+                        : undefined,
+                    url: site.domain,
+                    telephone: site.social?.whatsapp,
+                    sameAs: [
+                      site.social?.instagram,
+                      site.social?.tiktok,
+                      site.social?.facebook,
+                    ].filter(Boolean),
+                  }),
+                }}
+              />
+              <RefreshRouteOnSave />
+              <Navbar />
+              <main className="w-full relative min-h-dvh">
+                <div className="w-full mt-20 max-w-6xl mx-auto px-4">{children}</div>
+              </main>
+              <Footer />
+              <WhatsAppFloat />
+            </LenisProvider>
+          </SiteProvider>
+        </ThemeProvider>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

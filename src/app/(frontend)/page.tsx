@@ -17,8 +17,8 @@ const getAvailableCars = cache(async (draft: boolean) => {
     collection: 'cars',
     where: { 'analytics.status': { equals: 'available' } },
     sort: '-createdAt',
-    limit: 100, // Fetch up to 100 cars
-    depth: 1,
+    limit: -1,
+    depth: 2,
   })
 })
 

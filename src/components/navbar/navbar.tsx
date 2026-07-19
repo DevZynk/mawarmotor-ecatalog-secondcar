@@ -6,6 +6,7 @@ import Logo from '../shared/logo'
 import SearchModal from './search-modal'
 import WishlistButton from './wishlist-button'
 import { DesktopMenu, MobileMenu } from './nav-items'
+import ThemeButton from './theme-button'
 
 export default function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false)
@@ -41,7 +42,7 @@ export default function Navbar() {
             </button>
 
             <WishlistButton />
-
+            <ThemeButton />
             <MobileMenu />
           </div>
         </div>
