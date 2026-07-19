@@ -1,5 +1,3 @@
-import { getPayload } from 'payload'
-import config from '@payload-config'
 import { draftMode } from 'next/headers'
 
 import HeroSection from '@/components/home/hero-section'
@@ -19,7 +17,7 @@ export default async function HomePage() {
     where: { 'analytics.status': { equals: 'available' } },
     sort: '-createdAt',
     limit: 8,
-    depth: 2,
+    depth: 1,
   })
 
   const totalCars = carsResult.totalDocs

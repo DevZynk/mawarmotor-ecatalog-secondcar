@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import type { Car, Media } from '@/payload-types'
+import type { Car } from '@/payload-types'
 import Link from 'next/link'
 import { Suspense } from 'react'
 
@@ -59,30 +59,7 @@ export default async function CarsPage({
     ]) as any,
   }
 
-  if (params.search) {
-    where.and.push({ title: { like: params.search } })
-  }
-  if (params.brand) {
-    where.and.push({ 'carBrand.title': { equals: params.brand } })
-  }
-  if (params.type) {
-    where.and.push({ 'carType.title': { equals: params.type } })
-  }
-  if (params.fuel) {
-    where.and.push({ 'carSpecification.fuel': { equals: params.fuel } })
-  }
-  if (params.transmission) {
-    where.and.push({ 'carSpecification.transmission': { equals: params.transmission } })
-  }
 
-  if (params.minPrice || params.maxPrice) {
-    if (params.minPrice) {
-      where.and.push({ price: { greater_than_equal: params.minPrice } })
-    }
-    if (params.maxPrice) {
-      where.and.push({ price: { less_than_equal: params.maxPrice } })
-    }
-  }
 
   const page = Number(params.page) || 1
   const sort = params.sort || '-createdAt'
@@ -94,7 +71,7 @@ export default async function CarsPage({
     sort,
     page,
     limit: 12,
-    depth: 2,
+    depth: 1,
   })
 
   const { docs: cars, totalPages, totalDocs } = carsResult

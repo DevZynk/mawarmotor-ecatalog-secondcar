@@ -128,11 +128,13 @@ export default function SearchModal({ open, onClose }: SearchModalProps) {
   // Focus + reset on open
   useEffect(() => {
     if (open) {
-      setTimeout(() => inputRef.current?.focus(), 100)
-      setQuery('')
-      setResults([])
-      setFilters(DEFAULT_FILTERS)
-      setShowFilters(false)
+      setTimeout(() => {
+        inputRef.current?.focus()
+        setQuery('')
+        setResults([])
+        setFilters(DEFAULT_FILTERS)
+        setShowFilters(false)
+      }, 100)
     }
   }, [open])
 

@@ -11,11 +11,9 @@ import {
   X,
   Play,
   Camera,
-  Video,
-  Layers,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import type { GalleryProps, MediaItem, MediaCategory } from './types'
+import type { GalleryProps, MediaCategory } from './types'
 import { CAT_CONFIG } from './constants'
 
 // ── Main Gallery Component ───────────────────────────────
@@ -39,10 +37,13 @@ export default function MediaGallery({
   const visible = showAll ? filtered : filtered.slice(0, initialCount)
   const activeItem = filtered[activeIndex] || filtered[0]
 
-  // Reset active index when filter changes
-  useEffect(() => {
-    setActiveIndex(0)
-  }, [cat])
+  const navigatePrev = useCallback(() => {
+    setActiveIndex((prev) => (prev > 0 ? prev - 1 : filtered.length - 1))
+  }, [filtered.length])
+
+  const navigateNext = useCallback(() => {
+    setActiveIndex((prev) => (prev < filtered.length - 1 ? prev + 1 : 0))
+  }, [filtered.length])
 
   // Scroll active thumbnail into view
   useEffect(() => {
@@ -69,15 +70,7 @@ export default function MediaGallery({
     }
     window.addEventListener('keydown', handler)
     return () => window.removeEventListener('keydown', handler)
-  })
-
-  const navigatePrev = useCallback(() => {
-    setActiveIndex((prev) => (prev > 0 ? prev - 1 : filtered.length - 1))
-  }, [filtered.length])
-
-  const navigateNext = useCallback(() => {
-    setActiveIndex((prev) => (prev < filtered.length - 1 ? prev + 1 : 0))
-  }, [filtered.length])
+  }, [lightboxOpen, navigatePrev, navigateNext])
 
   if (items.length === 0) {
     return (
@@ -114,7 +107,10 @@ export default function MediaGallery({
             return (
               <button
                 key={key}
-                onClick={() => setCat(key as 'all' | MediaCategory)}
+                onClick={() => {
+                  setCat(key as 'all' | MediaCategory)
+                  setActiveIndex(0)
+                }}
                 className={cn(
                   'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all whitespace-nowrap',
                   cat === key

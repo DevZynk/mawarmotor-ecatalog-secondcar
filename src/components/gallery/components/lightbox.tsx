@@ -17,9 +17,13 @@ export function Lightbox({
   open: boolean
   onClose: () => void
 }) {
+  const [prevIndex, setPrevIndex] = useState(index)
   const [cur, setCur] = useState(index)
 
-  useEffect(() => setCur(index), [index])
+  if (index !== prevIndex) {
+    setPrevIndex(index)
+    setCur(index)
+  }
 
   // Keyboard navigation
   useEffect(() => {

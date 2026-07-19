@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import type { Car, Media } from '@/payload-types'
 import Link from 'next/link'
 import { getPayloadClient } from '@/lib/payload'
+import { cache } from 'react'
 
 import {
   Breadcrumb,
@@ -105,7 +106,7 @@ function buildGalleryItems(car: Car): MediaItem[] {
 
 // ── Data fetching ────────────────────────────────────────
 
-async function getCar(slug: string) {
+const getCar = cache(async (slug: string) => {
   const payload = await getPayloadClient()
   const { docs } = await payload.find({
     collection: 'cars',
@@ -114,9 +115,9 @@ async function getCar(slug: string) {
     depth: 2,
   })
   return docs[0] || null
-}
+})
 
-async function getRelatedCars(car: Car) {
+const getRelatedCars = cache(async (car: Car) => {
   const payload = await getPayloadClient()
   const brandId = typeof car.carBrand === 'object' ? car.carBrand?.id : car.carBrand
   const typeId = typeof car.carType === 'object' ? car.carType?.id : car.carType
@@ -132,10 +133,10 @@ async function getRelatedCars(car: Car) {
       ],
     },
     limit: 4,
-    depth: 2,
+    depth: 1,
   })
   return docs
-}
+})
 
 // ── Static params (SSG) ─────────────────────────────────
 
@@ -158,7 +159,6 @@ export async function generateMetadata({
 
   const imageUrl = car.gallery?.[0]?.image ? getImageUrl(car.gallery[0].image) : null
 
-  const brandName = typeof car.carBrand === 'object' ? car.carBrand?.title : null
   const titleText = `${car.title} - Harga ${formatRupiah(car.price)}`
 
   return {

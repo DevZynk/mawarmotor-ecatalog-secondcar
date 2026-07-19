@@ -162,7 +162,8 @@ function useDashboardData(cars: any[]) {
     const uniqueBrands = new Set<string>()
     const uniqueTypes = new Set<string>()
 
-    const processedCars: ProcessedCar[] = cars.map((c) => {
+    const processedCars: ProcessedCar[] = []
+    for (const c of cars) {
       const status = (c.analytics?.status || 'available') as ProcessedCar['status']
       const isSold = status === 'sold'
       const isActive = status === 'available' || status === 'booked'
@@ -221,7 +222,7 @@ function useDashboardData(cars: any[]) {
       const ownershipType: 'dealer' | 'personal' = ownership.ownershipType || 'dealer'
       const personalOwner = ownership.personalOwner || {}
 
-      return {
+      processedCars.push({
         id: c.id,
         title: c.title,
         plateNumber: ownership.plateNumber,
@@ -253,8 +254,8 @@ function useDashboardData(cars: any[]) {
         ownerAddress: personalOwner.address || '-', 
         stnkName: ownership.stnkName || '-',
         handOwnership: ownership.handOwnership ?? '-',
-      }
-    })
+      })
+    }
 
     // Brand analysis
     const brandAnalysis: BrandStat[] = Object.entries(brandMap)
@@ -348,7 +349,18 @@ function DonutChart({ data }: { data: AgingBucket[] }) {
   const R = 40
   const C = 2 * Math.PI * R
   const total = data.reduce((s, d) => s + d.count, 0)
-  let offset = 0
+
+  const segments: Array<AgingBucket & { dash: number; offset: number }> = []
+  let currentOffset = 0
+  for (const seg of data) {
+    const dash = total > 0 ? (seg.count / total) * C : 0
+    segments.push({
+      ...seg,
+      dash,
+      offset: currentOffset,
+    })
+    currentOffset += dash
+  }
 
   return (
     <div className="donut-wrap">
@@ -361,26 +373,21 @@ function DonutChart({ data }: { data: AgingBucket[] }) {
           stroke="var(--theme-elevation-150)"
           strokeWidth={14}
         />
-        {data.map((seg, i) => {
-          const dash = total > 0 ? (seg.count / total) * C : 0
-          const current = offset
-          offset += dash
-          return (
-            <circle
-              key={i}
-              cx="50"
-              cy="50"
-              r={R}
-              fill="none"
-              stroke={seg.color}
-              strokeWidth={14}
-              strokeDasharray={`${dash} ${C}`}
-              strokeDashoffset={-current}
-              transform="rotate(-90 50 50)"
-              strokeLinecap="butt"
-            />
-          )
-        })}
+        {segments.map((seg, i) => (
+          <circle
+            key={i}
+            cx="50"
+            cy="50"
+            r={R}
+            fill="none"
+            stroke={seg.color}
+            strokeWidth={14}
+            strokeDasharray={`${seg.dash} ${C}`}
+            strokeDashoffset={-seg.offset}
+            transform="rotate(-90 50 50)"
+            strokeLinecap="butt"
+          />
+        ))}
         <text
           x="50"
           y="46"

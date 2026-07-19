@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { cache } from 'react'
 import './styles.css'
 import Navbar from '@/components/navbar/navbar'
 import Footer from '@/components/footer/footer'
@@ -7,7 +7,7 @@ import { Plus_Jakarta_Sans } from 'next/font/google'
 import { SiteProvider } from '@/context/site-context'
 import { getPayloadClient } from '@/lib/payload'
 import { RefreshRouteOnSave } from '@/components/live-preview'
-
+import { LenisProvider } from '@/components/provider/lenis'
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
@@ -18,12 +18,15 @@ const jakarta = Plus_Jakarta_Sans({
 
 export const revalidate = 60
 
-export async function generateMetadata() {
+const getSiteConfig = cache(async () => {
   const payload = await getPayloadClient()
-
-  const site = await payload.findGlobal({
+  return await payload.findGlobal({
     slug: 'site',
   })
+})
+
+export async function generateMetadata() {
+  const site = await getSiteConfig()
 
   const logoUrl = typeof site.logo === 'object' ? site.logo?.url : null
 
@@ -81,25 +84,25 @@ export async function generateMetadata() {
         ? { index: false, follow: false }
         : { index: true, follow: true },
 
-authors: [
-  {
-    name: 'HZ Tech',
-    url: 'https://hztech.id',
-  },
-],
+    authors: [
+      {
+        name: 'HZ Tech',
+        url: 'https://hztech.id',
+      },
+    ],
 
-creator: 'Dheo Hilman Darmawan',
+    creator: 'Dheo Hilman Darmawan',
 
-publisher: 'HZ Tech',
+    publisher: 'HZ Tech',
 
-applicationName: site.siteName || 'Mawar Motor E-Catalog',
+    applicationName: site.siteName || 'Mawar Motor E-Catalog',
 
-generator: 'HZ Tech CMS',
+    generator: 'HZ Tech CMS',
 
-referrer: 'origin-when-cross-origin',
-other: {
-    'link:author': 'https://hztech.id'
-},
+    referrer: 'origin-when-cross-origin',
+    other: {
+      'link:author': 'https://hztech.id',
+    },
 
     icons: {
       icon: '/favicon.ico',
@@ -109,11 +112,7 @@ other: {
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const payload = await getPayloadClient()
-
-  const site = await payload.findGlobal({
-    slug: 'site',
-  })
+  const site = await getSiteConfig()
 
   const logoUrl = typeof site.logo === 'object' ? site.logo?.url : null
 
@@ -128,26 +127,20 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <html lang="id" suppressHydrationWarning>
-          <head>
-
+      <head>
         <link rel="author" href="/humans.txt" />
 
-        <link rel="author" href="https://hztech.id"/>
+        <link rel="author" href="https://hztech.id" />
 
-        <link rel="me" href="https://hztech.id"/>
+        <link rel="me" href="https://hztech.id" />
 
-        <link rel="help" href="https://hztech.id"/>
+        <link rel="help" href="https://hztech.id" />
 
-        <link
-            rel="license"
-            href="https://hztech.id"
-        />
-
-    </head>
+        <link rel="license" href="https://hztech.id" />
+      </head>
 
       <body className={`${jakarta.className} bg-background scroll-smooth relative`}>
-
-{/* Website Developed by
+        {/* Website Developed by
 
 HZ Tech
 https://hztech.id
@@ -166,65 +159,67 @@ Dheo Hilman Darmawan */}
             social: social,
           }}
         >
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify({
-                '@context': 'https://schema.org',
-                '@type': 'AutoDealer',
-                name: site.siteName,
-                image: logoUrl,
-                address: {
-                  '@type': 'PostalAddress',
-                  streetAddress: site.address,
-                  addressLocality: site.business?.city || site.location,
-                  addressRegion: site.business?.region,
-                  postalCode: site.business?.postalCode,
-                  addressCountry: 'ID',
-                },
-                geo:
-                  site.business?.latitude && site.business?.longitude
-                    ? {
-                        '@type': 'GeoCoordinates',
-                        latitude: site.business.latitude,
-                        longitude: site.business.longitude,
-                      }
-                    : undefined,
-                url: site.domain,
-                telephone: site.social?.whatsapp,
-                sameAs: [site.social?.instagram, site.social?.tiktok, site.social?.facebook].filter(
-                  Boolean,
-                ),
-              }),
-            }}
-          />
-          <RefreshRouteOnSave />
-          <Navbar />
-          <main className="w-full relative min-h-dvh">
-            <div className="w-full mt-20 max-w-6xl mx-auto px-4">{children}</div>
-          </main>
-          <Footer />
-          <WhatsAppFloat />
+          <LenisProvider>
+            <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{
+                __html: JSON.stringify({
+                  '@context': 'https://schema.org',
+                  '@type': 'AutoDealer',
+                  name: site.siteName,
+                  image: logoUrl,
+                  address: {
+                    '@type': 'PostalAddress',
+                    streetAddress: site.address,
+                    addressLocality: site.business?.city || site.location,
+                    addressRegion: site.business?.region,
+                    postalCode: site.business?.postalCode,
+                    addressCountry: 'ID',
+                  },
+                  geo:
+                    site.business?.latitude && site.business?.longitude
+                      ? {
+                          '@type': 'GeoCoordinates',
+                          latitude: site.business.latitude,
+                          longitude: site.business.longitude,
+                        }
+                      : undefined,
+                  url: site.domain,
+                  telephone: site.social?.whatsapp,
+                  sameAs: [
+                    site.social?.instagram,
+                    site.social?.tiktok,
+                    site.social?.facebook,
+                  ].filter(Boolean),
+                }),
+              }}
+            />
+            <RefreshRouteOnSave />
+            <Navbar />
+            <main className="w-full relative min-h-dvh">
+              <div className="w-full mt-20 max-w-6xl mx-auto px-4">{children}</div>
+            </main>
+            <Footer />
+            <WhatsAppFloat />
+          </LenisProvider>
         </SiteProvider>
-<script
-  type="application/ld+json"
-  dangerouslySetInnerHTML={{
-    __html: JSON.stringify({
-      '@context': 'https://schema.org',
-      '@type': 'WebSite',
-      name: site.siteName || 'Mawar Motor E-Catalog',
-      url: site.domain,
-      creator: {
-        '@type': 'Organization',
-        name: 'HZ Tech',
-        url: 'https://hztech.id',
-      },
-    }),
-  }}
-/>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'WebSite',
+              name: site.siteName || 'Mawar Motor E-Catalog',
+              url: site.domain,
+              creator: {
+                '@type': 'Organization',
+                name: 'HZ Tech',
+                url: 'https://hztech.id',
+              },
+            }),
+          }}
+        />
       </body>
     </html>
   )
 }
-
-

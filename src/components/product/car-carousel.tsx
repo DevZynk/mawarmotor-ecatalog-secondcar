@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/carousel'
 import Image from 'next/image'
 import Autoplay from 'embla-carousel-autoplay'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 
 type MediaItem = {
   type: 'image' | 'video'
@@ -22,7 +22,7 @@ interface CarCarouselProps {
 }
 
 export default function CarCarousel({ media }: CarCarouselProps) {
-  const plugin = useRef(Autoplay({ delay: 1000, stopOnInteraction: true }))
+  const [plugin] = useState(() => Autoplay({ delay: 1000, stopOnInteraction: true }))
   const [api, setApi] = useState<any>()
   const [activeIndex, setActiveIndex] = useState(0)
 
@@ -32,7 +32,7 @@ export default function CarCarousel({ media }: CarCarouselProps) {
     <div className=" relative w-full p-0 overflow-hidden">
       <Carousel
         className="rounded-sm"
-        plugins={[plugin.current]}
+        plugins={[plugin]}
         opts={{ align: 'center', loop: true }}
         setApi={(embla) => {
           setApi(embla)
@@ -41,8 +41,8 @@ export default function CarCarousel({ media }: CarCarouselProps) {
             setActiveIndex(embla.selectedScrollSnap())
           })
         }}
-        onMouseEnter={plugin.current.stop}
-        onMouseLeave={plugin.current.reset}
+        onMouseEnter={plugin.stop}
+        onMouseLeave={plugin.reset}
       >
         <CarouselContent>
           {media.map((item, idx) => (

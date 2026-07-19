@@ -100,8 +100,11 @@ export default function CarFilters() {
 
   // Sync price input dengan URL
   useEffect(() => {
-    setMinPrice(searchParams.get('minPrice') || '')
-    setMaxPrice(searchParams.get('maxPrice') || '')
+    const sync = setTimeout(() => {
+      setMinPrice(searchParams.get('minPrice') || '')
+      setMaxPrice(searchParams.get('maxPrice') || '')
+    }, 0)
+    return () => clearTimeout(sync)
   }, [searchParams])
 
   // ── URL helpers ───────────────────────────────────────────
@@ -133,36 +136,6 @@ export default function CarFilters() {
     router.push(pathname, { scroll: false })
   }
 
-  function ToggleButton({
-    title,
-    data,
-    paramKey,
-    currentValue,
-  }: {
-    title: string
-    data: { label: string; value: string }[]
-    paramKey: string
-    currentValue: string
-  }) {
-    return (
-      <div>
-        <p className="text-xs font-medium text-muted-foreground mb-2">{title}</p>
-        <div className="flex flex-wrap gap-1.5">
-          {data.map((opt) => (
-            <Button
-              key={opt.value}
-              size="sm"
-              variant={currentValue === opt.value ? 'default' : 'outline'}
-              onClick={() => updateParam(paramKey, opt.value)}
-              className="text-xs h-7"
-            >
-              {opt.label}
-            </Button>
-          ))}
-        </div>
-      </div>
-    )
-  }
 
   // ── Derived state ─────────────────────────────────────────
 
@@ -220,7 +193,7 @@ export default function CarFilters() {
           <div className="flex-1 px-4">
             <div className="bg-muted px-3 py-1.5 rounded-full text-xs inline-flex items-center gap-2">
               <span className="text-muted-foreground">Pencarian:</span>
-              <span className="font-medium">"{currentSearch}"</span>
+              <span className="font-medium">&quot;{currentSearch}&quot;</span>
               <button
                 onClick={() => updateParam('search', '')}
                 className="hover:bg-muted-foreground/20 rounded-full p-0.5 transition-colors"
@@ -443,6 +416,7 @@ export default function CarFilters() {
               data={fuelOptions}
               paramKey="fuel"
               currentValue={currentFuel}
+              onClick={updateParam}
             />
             {/* Transmission */}
             <ToggleButton
@@ -450,10 +424,44 @@ export default function CarFilters() {
               data={transmissionOptions}
               paramKey="transmission"
               currentValue={currentTrans}
+              onClick={updateParam}
             />
           </div>
         </div>
       )}
+    </div>
+  )
+}
+
+function ToggleButton({
+  title,
+  data,
+  paramKey,
+  currentValue,
+  onClick,
+}: {
+  title: string
+  data: { label: string; value: string }[]
+  paramKey: string
+  currentValue: string
+  onClick: (key: string, value: string) => void
+}) {
+  return (
+    <div>
+      <p className="text-xs font-medium text-muted-foreground mb-2">{title}</p>
+      <div className="flex flex-wrap gap-1.5">
+        {data.map((opt) => (
+          <Button
+            key={opt.value}
+            size="sm"
+            variant={currentValue === opt.value ? 'default' : 'outline'}
+            onClick={() => onClick(paramKey, opt.value)}
+            className="text-xs h-7"
+          >
+            {opt.label}
+          </Button>
+        ))}
+      </div>
     </div>
   )
 }

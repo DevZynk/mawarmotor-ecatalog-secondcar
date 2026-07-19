@@ -12,39 +12,54 @@ import {
 } from '@phosphor-icons/react'
 import { useState } from 'react'
 import { useWishlist } from '@/hooks/use-wishlist'
+
 const navItems = [
   { title: 'Beranda', icon: HouseIcon, href: '/' },
   { title: 'Mobil Bekas', icon: CarProfileIcon, href: '/cars' },
-  // { title: 'Rental', icon: SteeringWheelIcon, href: '/rent' },
 ]
 
 export function DesktopMenu() {
   const pathname = usePathname()
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
 
   return (
     <nav aria-label="Navigasi utama">
-      <ul className="flex gap-0.5 items-center">
-        {navItems.map((item) => {
+      <ul className="flex gap-1 items-center">
+        {navItems.map((item, index) => {
           const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href))
 
           return (
-            <li key={item.href}>
+            <li key={item.href} className="relative">
               <Link
                 href={item.href}
-                className={`relative flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
+                className={`relative flex items-center gap-1.5 px-4 py-2 text-sm font-semibold rounded-lg transition-colors duration-200 ${
                   isActive
                     ? 'text-primary'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+                    : 'text-muted-foreground hover:text-foreground'
                 }`}
                 aria-current={isActive ? 'page' : undefined}
               >
-                <item.icon size={18} weight={isActive ? 'fill' : 'regular'} />
-                {item.title}
+                {/* Hover Background Capsule */}
+                {hoveredIndex === index && (
+                  <motion.div
+                    layoutId="hover-capsule"
+                    className="absolute inset-0 bg-muted/60 rounded-lg"
+                    transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+                  />
+                )}
 
+                <span className="relative z-10 flex items-center gap-1.5">
+                  <item.icon size={18} weight={isActive ? 'fill' : 'regular'} />
+                  {item.title}
+                </span>
+
+                {/* Active Indicator Underline */}
                 {isActive && (
                   <motion.div
                     layoutId="nav-indicator"
-                    className="absolute -bottom-4.5 left-3 right-3 h-[3px] bg-primary rounded-full"
+                    className="absolute bottom-0 left-4 right-4 h-[2px] bg-primary rounded-full"
                     transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                   />
                 )}
@@ -56,6 +71,23 @@ export function DesktopMenu() {
     </nav>
   )
 }
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.1,
+    },
+  },
+}
+
+const itemVariants = {
+  hidden: { opacity: 0, x: 20 },
+  show: { opacity: 1, x: 0, transition: { type: 'spring' as const, stiffness: 300, damping: 25 } },
+}
+
 export function MobileMenu() {
   const [open, setOpen] = useState(false)
   const { count: wishlistCount } = useWishlist()
@@ -105,9 +137,14 @@ export function MobileMenu() {
 
               {/* Nav items */}
               <nav aria-label="Menu navigasi mobile">
-                <ul className="p-3 space-y-1">
+                <motion.ul
+                  variants={containerVariants}
+                  initial="hidden"
+                  animate="show"
+                  className="p-3 space-y-"
+                >
                   {navItems.map((item) => (
-                    <li key={item.href}>
+                    <motion.li key={item.href} variants={itemVariants}>
                       <Link
                         href={item.href}
                         onClick={() => setOpen(false)}
@@ -116,13 +153,18 @@ export function MobileMenu() {
                         <item.icon size={20} className="text-muted-foreground" />
                         {item.title}
                       </Link>
-                    </li>
+                    </motion.li>
                   ))}
-                </ul>
+                </motion.ul>
               </nav>
 
               {/* Tools section */}
-              <div className="px-6 pt-4 border-t mx-3">
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="px-6 pt-4 border-t mx-3"
+              >
                 <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
                   Tools
                 </p>
@@ -145,7 +187,7 @@ export function MobileMenu() {
                     </Link>
                   </li>
                 </ul>
-              </div>
+              </motion.div>
             </motion.div>
           </>
         )}
