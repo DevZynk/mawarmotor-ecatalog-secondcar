@@ -54,6 +54,7 @@ jobs:
             
             # Install dependensi & build langsung di server
             npm install
+            npm run payload migrate
             npm run build
             
             # Restart PM2
