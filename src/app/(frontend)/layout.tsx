@@ -25,7 +25,7 @@ const jetbrainsMono = JetBrains_Mono({
   variable: '--font-jetbrains-mono',
 })
 
-export const revalidate = 60
+export const revalidate = 3600 // 1 jam — site config jarang berubah
 
 const getSiteConfig = cache(async () => {
   const payload = await getPayloadClient()

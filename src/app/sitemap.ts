@@ -1,6 +1,8 @@
 import { MetadataRoute } from 'next'
 import { getPayloadClient } from '@/lib/payload'
 
+export const revalidate = 86400 // 24 jam — sitemap cukup di-regenerasi sekali sehari
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const payload = await getPayloadClient()
 

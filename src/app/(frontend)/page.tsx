@@ -1,6 +1,8 @@
 import { draftMode } from 'next/headers'
 import { cache } from 'react'
 
+export const revalidate = 3600 // 1 jam — homepage jarang berubah (ISR)
+
 import HeroSection from '@/components/home/hero-section'
 import { TypeSection, BrandSection } from '@/components/home/category-section'
 import FeaturedCars from '@/components/home/featured-cars'

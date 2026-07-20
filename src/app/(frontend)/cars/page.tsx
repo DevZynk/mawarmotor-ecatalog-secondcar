@@ -1,5 +1,8 @@
 import type { Metadata } from 'next'
 import type { Car } from '@/payload-types'
+
+export const revalidate = 3600 // 1 jam — listing mobil jarang berubah (ISR)
+
 import Link from 'next/link'
 import { Suspense } from 'react'
 
@@ -17,6 +20,7 @@ import { Button } from '@/components/ui/button'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import _ from 'lodash'
 import { getPayloadClient } from '@/lib/payload'
+import type { Where } from 'payload'
 
 export const metadata: Metadata = {
   title: 'Mobil Bekas Berkualitas',
@@ -56,8 +60,9 @@ export default async function CarsPage({
       },
       params.minPrice && { price: { greater_than_equal: params.minPrice } },
       params.maxPrice && { price: { less_than_equal: params.maxPrice } },
-    ]) as any,
+    ]) as unknown as Where[],
   }
+
 
 
 

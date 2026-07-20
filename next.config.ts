@@ -23,6 +23,41 @@ const nextConfig: NextConfig = {
     ],
   },
 
+  async headers() {
+    return [
+      {
+        // Aset statis Next.js (JS/CSS/fonts) — immutable 1 tahun, aman karena hash-based
+        source: '/_next/static/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        // Gambar & file media dari Payload CMS via S3 — cache 24 jam + stale-while-revalidate
+        source: '/api/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=86400, stale-while-revalidate=3600',
+          },
+        ],
+      },
+      {
+        // File publik statis: favicon, robots, og image
+        source: '/(favicon.ico|robots.txt|og.png|apple-touch-icon.png)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=86400',
+          },
+        ],
+      },
+    ]
+  },
+
   webpack: (config) => {
     config.resolve.extensionAlias = {
       '.cjs': ['.cts', '.cjs'],

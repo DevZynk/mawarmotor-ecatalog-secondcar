@@ -5,6 +5,9 @@ import Link from 'next/link'
 import { getPayloadClient } from '@/lib/payload'
 import { cache } from 'react'
 
+export const revalidate = 86400  // 24 jam — data individual mobil sangat jarang berubah
+export const dynamicParams = true // slug baru tetap dirender on-demand lalu dicache
+
 import {
   Breadcrumb,
   BreadcrumbItem,
