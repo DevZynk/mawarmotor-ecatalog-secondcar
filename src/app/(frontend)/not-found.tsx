@@ -1,5 +1,4 @@
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
+/* eslint-disable @next/next/no-html-link-for-pages */
 import { AlertCircle } from 'lucide-react'
 
 export default function NotFound() {
@@ -14,16 +13,18 @@ export default function NotFound() {
         Maaf, halaman yang Anda cari tidak ada, telah dihapus, atau namanya diubah.
       </p>
       <div className="flex gap-4">
-        <Link href="/">
-          <Button size="lg" className="rounded-full px-8 font-semibold">
-            Kembali ke Beranda
-          </Button>
-        </Link>
-        <Link href="/cars">
-          <Button size="lg" variant="outline" className="rounded-full px-8 font-semibold">
-            Lihat Mobil
-          </Button>
-        </Link>
+        <a
+          href="/"
+          className="inline-flex items-center justify-center h-11 rounded-full px-8 font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+        >
+          Kembali ke Beranda
+        </a>
+        <a
+          href="/cars"
+          className="inline-flex items-center justify-center h-11 rounded-full px-8 font-semibold border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors"
+        >
+          Lihat Mobil
+        </a>
       </div>
     </div>
   )
