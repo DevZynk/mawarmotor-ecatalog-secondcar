@@ -1,8 +1,8 @@
-"use client"
+'use client'
 
 import { ImageBox } from '@inoo-ch/payload-image-optimizer/frontend'
 import Link from 'next/link'
-import { useSite } from "@/context/site-context"
+import { useSite } from '@/context/site-context'
 
 export default function Logo() {
   const { logoUrl, siteName, location, alt } = useSite()
@@ -12,6 +12,7 @@ export default function Logo() {
       <div className="flex items-center gap-2">
         {logoUrl && (
           <ImageBox
+            unoptimized
             media={logoUrl}
             alt={alt}
             width={55}

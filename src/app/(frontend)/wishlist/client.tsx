@@ -64,11 +64,18 @@ export default function WishlistClient() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {items.map((car) => (
-            <div key={car.id} className="group flex flex-col overflow-hidden rounded-xl border bg-background shadow-sm hover:shadow-md transition-all">
+            <div
+              key={car.id}
+              className="group flex flex-col overflow-hidden rounded-xl border bg-background shadow-sm hover:shadow-md transition-all"
+            >
               {/* 4/3 */}
-              <Link href={`/cars/${car.slug}`} className="relative w-full aspect-4/3 rounded-t-xl overflow-hidden block">
+              <Link
+                href={`/cars/${car.slug}`}
+                className="relative w-full aspect-4/3 rounded-t-xl overflow-hidden block"
+              >
                 {car.image ? (
                   <ImageBox
+                    unoptimized
                     media={car.image}
                     alt={car.title}
                     fill
@@ -92,7 +99,7 @@ export default function WishlistClient() {
                   <Trash size={16} weight="bold" />
                 </button>
               </Link>
-              
+
               <div className="p-4 flex flex-col flex-1">
                 <Link href={`/cars/${car.slug}`}>
                   <h3 className="text-sm font-bold text-foreground line-clamp-2 hover:text-primary transition">
@@ -100,18 +107,16 @@ export default function WishlistClient() {
                   </h3>
                 </Link>
                 <div className="mt-auto pt-3">
-                  <p className="text-base font-bold text-primary">
-                    {formatRupiah(car.price)}
-                  </p>
+                  <p className="text-base font-bold text-primary">{formatRupiah(car.price)}</p>
                 </div>
               </div>
               <div className="p-4 pt-0">
-                 <Link href={`/cars/${car.slug}`} className="w-full">
-                    <Button variant="outline" className="w-full h-8 text-xs">
-                        <Info size={14} className="mr-1.5" />
-                        Lihat Detail
-                    </Button>
-                 </Link>
+                <Link href={`/cars/${car.slug}`} className="w-full">
+                  <Button variant="outline" className="w-full h-8 text-xs">
+                    <Info size={14} className="mr-1.5" />
+                    Lihat Detail
+                  </Button>
+                </Link>
               </div>
             </div>
           ))}

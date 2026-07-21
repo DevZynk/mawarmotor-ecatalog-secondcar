@@ -1,4 +1,4 @@
-'use'
+'use server'
 import { getPayloadClient } from '@/lib/payload'
 
 export default async function AdminLogo() {

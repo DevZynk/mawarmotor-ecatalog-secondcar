@@ -4,25 +4,14 @@ import { useState, useMemo, useCallback, useRef, useEffect } from 'react'
 import { ImageBox } from '@inoo-ch/payload-image-optimizer/frontend'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import {
-  ChevronLeft,
-  ChevronRight,
-  Expand,
-  X,
-  Play,
-  Camera,
-} from 'lucide-react'
+import { ChevronLeft, ChevronRight, Expand, X, Play, Camera } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { GalleryProps, MediaCategory } from './types'
 import { CAT_CONFIG } from './constants'
 
 // ── Main Gallery Component ───────────────────────────────
 
-export default function MediaGallery({
-  items,
-  title = 'Gallery',
-  initialCount = 8,
-}: GalleryProps) {
+export default function MediaGallery({ items, title = 'Gallery', initialCount = 8 }: GalleryProps) {
   const [cat, setCat] = useState<'all' | MediaCategory>('all')
   const [activeIndex, setActiveIndex] = useState(0)
   const [lightboxOpen, setLightboxOpen] = useState(false)
@@ -101,9 +90,8 @@ export default function MediaGallery({
         {/* Category Filter */}
         <div className="flex items-center gap-1.5 px-5 pb-3 overflow-x-auto">
           {Object.entries(CAT_CONFIG).map(([key, config]) => {
-            const count = key === 'all'
-              ? items.length
-              : items.filter((i) => i.category === key).length
+            const count =
+              key === 'all' ? items.length : items.filter((i) => i.category === key).length
             return (
               <button
                 key={key}
@@ -140,6 +128,7 @@ export default function MediaGallery({
             <div className="relative w-full aspect-video">
               {activeItem.type === 'photo' ? (
                 <ImageBox
+                  unoptimized
                   media={activeItem.src}
                   alt={activeItem.alt}
                   fill
@@ -221,6 +210,7 @@ export default function MediaGallery({
               )}
             >
               <ImageBox
+                unoptimized
                 media={item.thumb}
                 alt={item.alt}
                 fill
@@ -297,6 +287,7 @@ export default function MediaGallery({
             {/* Content */}
             {activeItem.type === 'photo' ? (
               <ImageBox
+                unoptimized
                 media={activeItem.src}
                 alt={activeItem.alt}
                 width={1280}
@@ -305,12 +296,7 @@ export default function MediaGallery({
                 priority
               />
             ) : (
-              <video
-                src={activeItem.src}
-                controls
-                autoPlay
-                className="max-w-full max-h-[85vh]"
-              />
+              <video src={activeItem.src} controls autoPlay className="max-w-full max-h-[85vh]" />
             )}
 
             {/* Counter & Caption */}
@@ -318,9 +304,7 @@ export default function MediaGallery({
               <p className="text-white/80 text-sm">
                 {activeIndex + 1} / {filtered.length}
               </p>
-              {activeItem.alt && (
-                <p className="text-white/60 text-xs">{activeItem.alt}</p>
-              )}
+              {activeItem.alt && <p className="text-white/60 text-xs">{activeItem.alt}</p>}
             </div>
           </div>
         </div>

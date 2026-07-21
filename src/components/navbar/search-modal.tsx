@@ -52,7 +52,6 @@ interface SearchFilters {
   sort: string
 }
 
-
 // ── Constants ────────────────────────────────────────────
 
 const FUELS = [
@@ -136,8 +135,6 @@ export default function SearchModal() {
       }, 100)
     }
   }, [open])
-
-
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -261,10 +258,7 @@ export default function SearchModal() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon-lg"
-        >
+        <Button variant="ghost" size="icon-lg">
           <MagnifyingGlassIcon />
         </Button>
       </DialogTrigger>
@@ -569,6 +563,7 @@ export default function SearchModal() {
               <div className="relative w-20 h-14 rounded-lg bg-muted overflow-hidden shrink-0">
                 {car.image ? (
                   <ImageBox
+                    unoptimized
                     media={car.image}
                     alt={car.title}
                     fill

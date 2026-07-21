@@ -31,10 +31,8 @@ export default function CardCatalog({
   fuelType,
   badge,
 }: CardCatalogProps) {
-
   return (
     <Card className="group pt-0 flex flex-col overflow-hidden rounded-xl max-w-xs border bg-background shadow-sm hover:shadow-md transition-all">
-      
       {/* IMAGE */}
       <CardHeader className="relative p-0">
         <Link href={href}>
@@ -42,6 +40,7 @@ export default function CardCatalog({
           <div className="relative w-full aspect-4/3 rounded-xl overflow-hidden">
             {image ? (
               <ImageBox
+                unoptimized
                 media={image}
                 alt={title || 'Mobil'}
                 fill
@@ -78,7 +77,6 @@ export default function CardCatalog({
       </CardHeader>
 
       <CardContent className="flex flex-col flex-1 pl-6 space-y-2">
-        
         <Link href={href}>
           <h3 className="text-base  font-bold text-foreground line-clamp-2 hover:text-primary transition">
             {title}
@@ -97,20 +95,12 @@ export default function CardCatalog({
         </div>
 
         <div className="mt-auto space-y-1">
-          <p className="text-lg font-bold text-foreground">
-            {formatRupiah(price)}
-          </p>
+          <p className="text-lg font-bold text-foreground">{formatRupiah(price)}</p>
 
           <p className="text-xs text-muted-foreground">
-            DP{' '}
-            <span className="font-medium text-foreground">
-              {formatRupiah(dp)}
-            </span>
+            DP <span className="font-medium text-foreground">{formatRupiah(dp)}</span>
             {' • '}
-            <span className="font-medium text-foreground">
-              {formatRupiah(installment)}
-            </span>{' '}
-            /bulan
+            <span className="font-medium text-foreground">{formatRupiah(installment)}</span> /bulan
           </p>
         </div>
       </CardContent>
@@ -125,7 +115,6 @@ export default function CardCatalog({
           <ArrowRight size={15} />
         </Link>
       </CardFooter>
-      
     </Card>
   )
 }

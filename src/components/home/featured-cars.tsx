@@ -39,6 +39,7 @@ export default function FeaturedCars({ cars }: { cars: Car[] }) {
               <div className="relative aspect-4/3 bg-muted overflow-hidden">
                 {car.cardthumbnail && typeof car.cardthumbnail === 'object' ? (
                   <ImageBox
+                    unoptimized
                     media={car.cardthumbnail}
                     alt={`${car.title} - Dealer mobil bekas`}
                     fill

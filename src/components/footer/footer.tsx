@@ -21,8 +21,9 @@ export default async function Footer() {
           <div className="md:col-span-2 space-y-3">
             <div className="flex items-center gap-3">
               {logo && typeof logo === 'object' && (
-                <div className='w-50 h-50'>
+                <div className="w-50 h-50">
                   <ImageBox
+                    unoptimized
                     media={logo}
                     alt={logoAlt}
                     className="rounded-full object-cover"

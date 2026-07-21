@@ -13,6 +13,7 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   images: {
     qualities: [75, 80],
+    formats: ['image/webp'],
     localPatterns: [
       {
         pathname: '/api/media/file/**',

@@ -23,6 +23,7 @@ export function GridCell({
       )}
     >
       <ImageBox
+        unoptimized
         media={item.thumb}
         alt={item.alt}
         fill

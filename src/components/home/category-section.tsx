@@ -40,6 +40,7 @@ function LazyIcon({ imgUrl, title, size }: { imgUrl: string | null; title: strin
     >
       {visible && imgUrl ? (
         <ImageBox
+          unoptimized
           media={imgUrl}
           alt={title}
           width={40}
@@ -141,7 +142,7 @@ export function BrandSection({ brands }: { brands: CarBrand[] }) {
           <Card key={brand.id}>
             <Link
               href={`/cars?brand=${brand.title}`}
-             className="group flex flex-col items-center gap-2 p-3 transition-all"
+              className="group flex flex-col items-center gap-2 p-3 transition-all"
               style={{ width: 120 }}
             >
               <LazyIcon imgUrl={getImageUrl(brand.icon)} title={brand.title || ''} size={10} />

@@ -45,6 +45,7 @@ export function Lightbox({
         <div className="relative w-full h-full flex items-center justify-center">
           {item.type === 'photo' ? (
             <ImageBox
+              unoptimized
               media={item.src}
               alt={item.alt}
               width={item.width || 1200}

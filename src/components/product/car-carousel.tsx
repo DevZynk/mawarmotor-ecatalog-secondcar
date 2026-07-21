@@ -50,9 +50,10 @@ export default function CarCarousel({ media }: CarCarouselProps) {
               <div className="relative w-full aspect-video overflow-hidden  bg-black">
                 {item.type === 'image' ? (
                   <ImageBox
+                    unoptimized
                     media={item.url}
                     alt={item.alt || `media-${idx}`}
-                    sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw'
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     fill
                     className="object-cover"
                   />

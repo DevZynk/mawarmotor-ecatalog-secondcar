@@ -1,11 +1,16 @@
-import type { Car} from '@/payload-types'
+import type { Car } from '@/payload-types'
 import { ImageBox } from '@inoo-ch/payload-image-optimizer/frontend'
 import Link from 'next/link'
 import { Gauge, Fuel } from 'lucide-react'
 import formatRupiah from '@/lib/formatRupiah'
 
 function getFuelLabel(f: string): string {
-  const m: Record<string, string> = { bensin: 'Bensin', solar: 'Solar', listrik: 'Listrik', hybrid: 'Hybrid' }
+  const m: Record<string, string> = {
+    bensin: 'Bensin',
+    solar: 'Solar',
+    listrik: 'Listrik',
+    hybrid: 'Hybrid',
+  }
   return m[f] || f
 }
 
@@ -29,6 +34,7 @@ export default function RelatedCars({ cars, currentSlug }: { cars: Car[]; curren
               <div className="relative aspect-4/3 bg-muted overflow-hidden">
                 {car.cardthumbnail && typeof car.cardthumbnail === 'object' ? (
                   <ImageBox
+                    unoptimized
                     media={car.cardthumbnail}
                     alt={car.title}
                     fill

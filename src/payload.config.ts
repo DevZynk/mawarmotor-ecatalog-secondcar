@@ -31,8 +31,8 @@ export default buildConfig({
       beforeNavLinks: ['/payload/components/AnalyticNavLink'],
       afterNavLinks: ['/payload/components/LogoutButton'],
       graphics: {
-        // Icon: '/payload/components/AdminIcon',
-        // Logo: '/payload/components/AdminLogo',
+        Icon: '/payload/components/AdminIcon',
+        Logo: '/payload/components/AdminLogo',
       },
 
       views: {

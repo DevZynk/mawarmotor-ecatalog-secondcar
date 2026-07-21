@@ -27,6 +27,7 @@ export default async function HeroSection({ totalCars }: { totalCars: number }) 
     >
       {hasCmsImage ? (
         <ImageBox
+          unoptimized
           media={backgroundImage}
           alt="Hero Background"
           fill
@@ -66,20 +67,14 @@ export default async function HeroSection({ totalCars }: { totalCars: number }) 
 
           <div className="flex flex-wrap gap-3 mt-8">
             <Link href="/cars">
-              <Button
-                size="lg"
-                variant="secondary"
-              >
+              <Button size="lg" variant="secondary">
                 <Icon name="CarProfileIcon" size={18} weight="bold" />
                 Lihat Koleksi Mobil
               </Button>
             </Link>
 
             <Link href={waLink} target="_blank" rel="noopener noreferrer">
-              <Button
-                size="lg"
-                variant="secondary"
-              >
+              <Button size="lg" variant="secondary">
                 <Icon name="WhatsappLogoIcon" size={18} weight="fill" />
                 Hubungi WhatsApp
               </Button>

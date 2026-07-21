@@ -9,6 +9,7 @@ import { getPayloadClient } from '@/lib/payload'
 import { RefreshRouteOnSave } from '@/components/live-preview'
 import { LenisProvider } from '@/components/provider/lenis'
 import { ThemeProvider } from '@/components/provider/theme'
+import { Analytics } from "@vercel/analytics/next"
 
 const oxanium = Oxanium({
   subsets: ['latin'],
@@ -291,6 +292,7 @@ Dheo Hilman Darmawan */}
             }),
           }}
         />
+        <Analytics/>
       </body>
     </html>
   )

@@ -21,6 +21,8 @@ import { ExportPreview as ExportPreview_cdf7e044479f899a31f804427d568b36 } from 
 import { ExportSaveButton as ExportSaveButton_cdf7e044479f899a31f804427d568b36 } from '@payloadcms/plugin-import-export/rsc'
 import { ImportPreview as ImportPreview_cdf7e044479f899a31f804427d568b36 } from '@payloadcms/plugin-import-export/rsc'
 import { ImportSaveButton as ImportSaveButton_cdf7e044479f899a31f804427d568b36 } from '@payloadcms/plugin-import-export/rsc'
+import { default as default_84a3924fa6975f815fe159e126e4ec9c } from '../../../payload/components/AdminIcon'
+import { default as default_564bf34304abb38917a0b375396d43e6 } from '../../../payload/components/AdminLogo'
 import { default as default_7c0525bf499ee6ddfb90ddfff60da17e } from '../../../payload/components/LogoutButton'
 import { default as default_4538e12026942134a4f829e6f6f521ff } from '../../../payload/components/AnalyticNavLink'
 import { S3ClientUploadHandler as S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24 } from '@payloadcms/storage-s3/client'
@@ -53,6 +55,8 @@ export const importMap = {
   "@payloadcms/plugin-import-export/rsc#ExportSaveButton": ExportSaveButton_cdf7e044479f899a31f804427d568b36,
   "@payloadcms/plugin-import-export/rsc#ImportPreview": ImportPreview_cdf7e044479f899a31f804427d568b36,
   "@payloadcms/plugin-import-export/rsc#ImportSaveButton": ImportSaveButton_cdf7e044479f899a31f804427d568b36,
+  "/payload/components/AdminIcon#default": default_84a3924fa6975f815fe159e126e4ec9c,
+  "/payload/components/AdminLogo#default": default_564bf34304abb38917a0b375396d43e6,
   "/payload/components/LogoutButton#default": default_7c0525bf499ee6ddfb90ddfff60da17e,
   "/payload/components/AnalyticNavLink#default": default_4538e12026942134a4f829e6f6f521ff,
   "@payloadcms/storage-s3/client#S3ClientUploadHandler": S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24,
